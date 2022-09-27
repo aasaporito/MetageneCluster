@@ -107,7 +107,7 @@ def kCluster(numClusters, data): #
     prev=[] #tracks the previous location of each feature 
     
     for i in range(len(data)): 
-        prev.append([])
+        prev.append(0) 
 
     mxs= calcMax(data)
 
@@ -127,42 +127,40 @@ def kCluster(numClusters, data): #
     # clusters.append([])
 
     #check prev
-    prev = clusters
+    #prev = clusters
     restart = False
     # clusters, clusterCenters,prev =init(numClusters,data)
     #print('numcluster ',len(clusters) , len(clusterCenters))
     stop=False 
     memory=[]
+    First = True
     #memory.append(len(data))
     while stop == False:
         print('read 0' , clusters)
         movers = 0
         #reset clusters
-        for i in range(numClusters): 
+        for i in range(numClusters): #[[],[],[],...]
             clusters[i]=[]
         
         assnmnts = [] 
+
         #assign new cluster for each feature
         for i,feature in enumerate(data):
-            print('read 1' , clusters)
             cluster = calcNearestCluster(feature, clusterCenters) #cluster index
-            print('clusters cluster: ', cluster, clusters[cluster])
-            # clusters[cluster].append(i)  #populate clusters
-            # print( 'read 2' , cluster , clusters[cluster])
-            # if prev[i]!= cluster: 
+            clusters[cluster].append(i)  #populate clusters
+            if First== True: 
+                prev[i]=cluster
+                First=False
+            else: 
+                if prev[i]!= cluster:
+                    movers+=1
+                    prev[i] = cluster
+            # if prev[i]!= cluster: #check if feature changed clusters
             #     movers+=1 
             #     prev[i] = cluster
 
-            assnmnts.append(cluster)
-            
-        for i, x in enumerate(assnmnts):
-            print( 'read 2' , cluster , clusters[cluster])
-            clusters[x].append(i)  #populate clusters
-            print( 'read 3' , cluster , clusters[cluster])
 
-            if prev[i]!= cluster: 
-                movers+=1 
-                prev[i] = cluster
+   
             
         #print(len(clusters[0]) , len(clusters[1]),len(clusters[2]))
 
