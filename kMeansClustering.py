@@ -136,7 +136,7 @@ def kCluster(numClusters, data): #
     First = True
     #memory.append(len(data))
     while stop == False:
-        print('read 0' , clusters)
+      
         movers = 0
         #reset clusters
         for i in range(numClusters): #[[],[],[],...]
@@ -181,7 +181,7 @@ def kCluster(numClusters, data): #
         
         #calc final distance
         totDistance = finalDistance(clusters,clusterCenters, data )
-        print('read 3' , clusters)
+      
     return clusters , totDistance
     
 
@@ -212,13 +212,13 @@ def autoKCluster(data):
     diff = totDistance1 
     numClusters = 2 
     while diff>(.2*(totDistancePerIteration[numClusters-2])):
-        clusters, clusterCenters, totDistance = kCluster(numClusters, data)
+        clusters, totDistance = kCluster(numClusters, data)
         totDistancePerIteration.append(totDistance)
         diff= abs(totDistancePerIteration[numClusters-1]-totDistancePerIteration[numClusters-2])
         print(diff)
         numClusters+=1 
     print('Best clusters:' ,  numClusters-1)
-    return clusters , clusterCenters 
+    return clusters  
 
     
     

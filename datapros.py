@@ -185,7 +185,6 @@ class metaGenePlot:
             lengths.append(length) 
         print(lengths)    
     
-    
     # #normalize gff arrays to same length 
     def normalizeArray(self, targetLength):
         if targetLength== 'avg': 
@@ -210,8 +209,7 @@ class metaGenePlot:
                     
                     if math.floor(step)== math.ceil(step):  #reached a whole number step
                         currArray.append(array[int(step)-1])
-                        
-
+                    
                     elif (math.ceil(prev) == math.floor(step))  and prev!= 0: #step cross an integer -> perform weighted average
                         
                         weight1 = ((math.ceil(prev)-prev)/stepSize)*array[int(math.floor(prev))]
@@ -300,7 +298,7 @@ class metaGenePlot:
         elif(numClusters =='auto'): 
             print("Fitting data...") 
             print('features:', len(trendData))
-            clusters, clusterCenters = autoKCluster(trendData)
+            clusters = autoKCluster(trendData)
         else: #divide data into clusters
             print("Fitting data...")
             clusters, distance = kCluster(numClusters, trendData)
