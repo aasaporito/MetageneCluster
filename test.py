@@ -10,8 +10,8 @@ from datapros import invertArray
 
 
 test = metaGenePlot('RPKM_alignments.sam','saccharomyces_cerevisiae.gff','gene', 0 ) #single para, if single = true - provide input for left or right end (if exists)
-test.plot( 'auto',1500)
-
+test.plot( 4,500)
+ 
 # labels = []
 # with open('SRR20274751_HUMAN.sam', 'r') as samFile:
 #             for line in samFile:

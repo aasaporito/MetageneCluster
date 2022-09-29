@@ -33,7 +33,6 @@ def averageArray(graphArrays):
 
 
 def averageUpDown(upDownStream):
-    
     upArray = []
     downArray =[]
     for i in range(len(upDownStream[0][0])):
@@ -64,8 +63,7 @@ class metaGenePlot:
         #self.chromDict, self.romanNums = setArray(self.gff, self.feature)
 
 
-    #build chromosome arrays from gff 
-   
+    #build chromosome arrays from gff
     def setArray(self):
         numArrays= 0 
         maxLength = 0 #add maxLength for each unique chrom 
@@ -76,10 +74,8 @@ class metaGenePlot:
             for line in gffFile:
                 cols = line.split('\t')
                 #print(cols)
-                if len(cols)>1 and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom and check if the sequence is read forwards
-                    #print(cols[3], cols[4])
-                    # if cols[0][3] == 'I':
-                    #     romanNums = True
+                if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom and check if the sequence is read forwards
+                    #print(cols[3], cols[4]
                     if int(cols[4]) > maxLength: #farthest poi in chromosome
                             maxLength=int(cols[4])
                     if cols[0]!= currChrom: # crhomosome number
@@ -96,7 +92,6 @@ class metaGenePlot:
 
     #populate Arrays with sam data
     def populateArray(self):
-        romanNums = False
         with open(self.sam, 'r') as samFile:
             for line in samFile:
                 cols = line.split('\t')
@@ -106,18 +101,9 @@ class metaGenePlot:
                         chrom = chrom[0:4]
                     else:
                         chrom = chrom[0:5]
-                    # try:
-                    #     int(chrom[3:])
-                    # except:
-                    #     romanNums =True
+                   
                     end = start + seqLength -1 
-                    # if self.romanNums != romanNums and romanNums == False: 
-                    #     #convert SAM chrom labels from int to roman
-                    #     chrom = intToRoman(chrom[3:])
-                    # elif self.romanNums != romanNums  and romanNums == True: 
-                    #     #convert SAM chrom labels from roman to int
-                    #     chrom = romanToInt(chrom[3:])
-
+                  
                         
                     for i in range(start-1, end):
                         self.chromDict[chrom][i]+= 1
@@ -139,7 +125,7 @@ class metaGenePlot:
             for line in gffFile:
                 cols = line.split('\t')
 
-                if len(cols)>1  and cols[2]== self.feature and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
+                if len(cols)>1  and cols[2]== self.feature:  #and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
                     currArray=[]
                     dwnStream = []
                     upStream =[]
@@ -157,11 +143,15 @@ class metaGenePlot:
                         try:
                             upStream.append(self.chromDict[chrom][i])
                         except: 
-                            upStream.append(0)
+                           upStream.append(0)
 
-                    # if  cols[6]=='-':
-                    #     currArray = invertArray(currArray)
-
+                    if  cols[6]=='-':
+                        print('original ', currArray)
+                        currArray = invertArray(currArray)
+                        temp= invertArray(dwnStream)
+                        dwnStream = invertArray(upStream)
+                        upStream = temp
+                        print('inverted ',currArray )
                     upDownStream.append((dwnStream,upStream))
                     gffArrays.append(currArray)#add to array of arrays 
                     names.append(cols[8])
