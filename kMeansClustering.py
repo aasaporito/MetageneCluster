@@ -159,9 +159,7 @@ def kCluster(numClusters, data): #
             #     movers+=1 
             #     prev[i] = cluster
 
-
-   
-            
+       
         #print(len(clusters[0]) , len(clusters[1]),len(clusters[2]))
 
         #calc new center for each cluster 

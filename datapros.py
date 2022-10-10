@@ -104,10 +104,14 @@ class metaGenePlot:
                    
                     end = start + seqLength -1 
                   
+                    try:   
+                        for i in range(start-1, end):
                         
-                    for i in range(start-1, end):
-                        self.chromDict[chrom][i]+= 1
-                  
+                                self.chromDict[chrom][i]+= 1
+                    except: 
+                        print("Please ensure input files are compatible.")
+                        break 
+                        
         samFile.close()
 
     def testArrays(self):
@@ -125,17 +129,19 @@ class metaGenePlot:
             for line in gffFile:
                 cols = line.split('\t')
 
-                if len(cols)>1  and cols[2]== self.feature:  #and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
+                if len(cols)>1  and cols[2]== self.feature:# and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
                     currArray=[]
                     dwnStream = []
                     upStream =[]
+                    zeros = True
                     chrom, start, end = cols[0], int(cols[3])-1 , int(cols[4])-1 # get chromosome, start/end locations
                     down = start- self.upDown
                     up = end + self.upDown
 
                     for i in range(start, end):
                         currArray.append(self.chromDict[chrom][i])#pull the values from the chromDIct to build new array
-                    
+                        if self.chromDict[chrom][i]!=0:
+                            zeros = False
                     for i in range(down, start):
                         dwnStream.append(self.chromDict[chrom][i])
 
@@ -146,14 +152,16 @@ class metaGenePlot:
                            upStream.append(0)
 
                     if  cols[6]=='-':
-                        print('original ', currArray)
-                        currArray = invertArray(currArray)
-                        temp= invertArray(dwnStream)
+                       # print('original ', currArray)
+                        currArray = invertArray(currArray) #invert feature array
+                        temp= invertArray(dwnStream) #invert and flip up/down stream
                         dwnStream = invertArray(upStream)
                         upStream = temp
-                        print('inverted ',currArray )
+                        #print('inverted ',currArray )
+                    if zeros == True: 
+                        print(cols[6])
                     upDownStream.append((dwnStream,upStream))
-                    gffArrays.append(currArray)#add to array of arrays 
+                    gffArrays.append(currArray)
                     names.append(cols[8])
                     
 
@@ -290,6 +298,7 @@ class metaGenePlot:
             print('features:', len(trendData))
             clusters = autoKCluster(trendData)
         else: #divide data into clusters
+
             print("Fitting data...")
             clusters, distance = kCluster(numClusters, trendData)
            
@@ -299,17 +308,23 @@ class metaGenePlot:
             featureNames=[]
             name=self.gff[0:-4]+' '+self.feature+' cluster '+str(i)
             for feature in cluster:
-                clusterData.append(trendData[feature])
-                featureNames.append(self.names[feature])
-            clusterNames.append(featureNames)
                 
+                featureNames.append(self.names[feature])
+                if self.upDown> 0 and clusterUpDown==False:
+                    clusterData = self.upDownStream[feature][0]+trendData[feature]+self.upDownStream[feature][1]
+                    
+                else:
+                    clusterData.append(trendData[feature])
+
+            clusterNames.append(featureNames)
+            
             avgArray=averageArray(clusterData)
-            avgDown,avgUp = averageUpDown(self.upDownStream)
-            if self.upDown> 0:
-                print(len(avgDown), len(avgArray),len(avgUp))
-                fullArray = avgDown+avgArray+avgUp 
-            else:
-                fullArray = avgArray
+           # avgDown,avgUp = averageUpDown(self.upDownStream)
+            # if self.upDown> 0 and clusterUpDown==False:
+            #     print(len(avgDown), len(avgArray),len(avgUp))
+            #     fullArray = avgDown+avgArray+avgUp 
+            # else:
+            #     fullArray = avgArray
             print("Plotting data...",len(cluster))
             genPlot(avgArray,name,self.upDown)
             #enPlot(clusterCenters[i],name)
