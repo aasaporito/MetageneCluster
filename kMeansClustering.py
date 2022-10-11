@@ -1,16 +1,5 @@
 import random
 
-
-# def calcMax(data):
-#     mxs=[]
-#     for feature in data:
-#         max=0
-#         for val in feature:
-#             if val>max:
-#                 max = val
-#         mxs.append(max) 
-#     return mxs
-
 def calcMax(data):
     mxs=[]
     for i in range(len(data[0])):
@@ -82,11 +71,12 @@ def init(numClusters,data):
         clusters.append([])
         centers=[]
         for i in range(len(data[0])):
-            center = random.randint(0,int(mxs[i]))
+            center = random.randint(0,int(mxs[i])) #pick random value in the range of the data at that index
             centers.append(center)
         clusterCenters.append(centers)
     return clusters, clusterCenters, prev
 
+#calculate final distances from each feature to their current cluster to assess the accuracy of the clustering
 def finalDistance(clusters, clusterCenters, data): 
     totDist=0
     for i,cluster in enumerate(clusters):
@@ -100,7 +90,8 @@ def finalDistance(clusters, clusterCenters, data):
 
     return totDist       
 
-         # double check prev tracking      
+
+   
 def kCluster(numClusters, data): #
     clusters=[] #an array of feature indexes belong to each cluster 
     clusterCenters=[] # a center for each position of each cluster
@@ -135,8 +126,7 @@ def kCluster(numClusters, data): #
     memory=[]
     First = True
     #memory.append(len(data))
-    while stop == False:
-      
+    while stop == False:   
         movers = 0
         #reset clusters
         for i in range(numClusters): #[[],[],[],...]
@@ -155,27 +145,14 @@ def kCluster(numClusters, data): #
                 if prev[i]!= cluster:
                     movers+=1
                     prev[i] = cluster
-            # if prev[i]!= cluster: #check if feature changed clusters
-            #     movers+=1 
-            #     prev[i] = cluster
 
-       
-        #print(len(clusters[0]) , len(clusters[1]),len(clusters[2]))
 
-        #calc new center for each cluster 
-        # for cluster in clusters:
-        #     if len(cluster) == 0: 
-        #         restart= True
-        #         clusters , totDistance = kCluster(numClusters,data)
-
-        # if not restart: 
-        for i,cluster in enumerate(clusters):
-                    
+        #calc new centers for each cluster
+        for i,cluster in enumerate(clusters):    
                 clusterCenters[i] =  calcCenters(cluster,data)       
         
-        memory.append(movers)
-        #stop condition 
-        stop = isStable(memory)
+        memory.append(movers) #track how many features changed cluster
+        stop = isStable(memory)#stop condition 
         
         #calc final distance
         totDistance = finalDistance(clusters,clusterCenters, data )
@@ -183,8 +160,8 @@ def kCluster(numClusters, data): #
     return clusters , totDistance
     
 
-
-def oneCluster(graphArrays): #set baseline distance for autoCluster
+#set baseline distance for autoCluster
+def oneCluster(graphArrays): 
     avgArray = []
     for i in range(len(graphArrays[0])):
         avgArray.append(0)
@@ -203,10 +180,10 @@ def oneCluster(graphArrays): #set baseline distance for autoCluster
 
 
 def autoKCluster(data): 
-    #get tot distance from each cluster, stop when change in tot distance from last cluser < 25%
+    #get total distance from each cluster, stop when change in total distance from last cluser < 25%
     totDistancePerIteration=[]
-    x,totDistance1 = oneCluster(data)
-    totDistancePerIteration.append(totDistance1)
+    x,totDistance1 = oneCluster(data) #baseline
+    totDistancePerIteration.append(totDistance1) 
     diff = totDistance1 
     numClusters = 2 
     while diff>(.2*(totDistancePerIteration[numClusters-2])):

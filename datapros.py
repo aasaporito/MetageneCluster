@@ -9,6 +9,7 @@ from kMeansClustering import autoKCluster, kCluster
 from plot import genPlot
 from writeExcel import wtExcell
 
+#invert feature array
 def invertArray(feature): 
     temp = 0 
     inverted = feature 
@@ -18,7 +19,7 @@ def invertArray(feature):
         inverted[-(i+1)] = temp
     return inverted
 
-
+#average feature arrays at each index
 def averageArray(graphArrays):
     avgArray = []
     for i in range(len(graphArrays[0])):
@@ -31,7 +32,7 @@ def averageArray(graphArrays):
         avgArray[j]=avgArray[j]/numArray
     return avgArray
 
-
+#average up/down arrays
 def averageUpDown(upDownStream):
     upArray = []
     downArray =[]
@@ -51,7 +52,7 @@ def averageUpDown(upDownStream):
     return downArray , upArray
 
 
-
+#a class to create metagene plots based on SAM and GFF/GFT
 class metaGenePlot:
     def __init__(self,sam_file, gff_file, featureType, udStream = 0):
         self.sam = sam_file 
@@ -73,8 +74,8 @@ class metaGenePlot:
         with open(self.gff, "r") as gffFile:
             for line in gffFile:
                 cols = line.split('\t')
-                #print(cols)
-                if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom and check if the sequence is read forwards
+               
+                if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
                     #print(cols[3], cols[4]
                     if int(cols[4]) > maxLength: #farthest poi in chromosome
                             maxLength=int(cols[4])
@@ -87,10 +88,10 @@ class metaGenePlot:
             arrLen= []
             for i in range(maxLength):
                 arrLen.append(0)
-            chromDict[key]= arrLen #innitialize each chrom array with 0s to len(maxLength)
+            chromDict[key]= arrLen #initialize each chrom array with 0s to len(maxLength)
         self.chromDict = chromDict   
 
-    #populate Arrays with sam data
+    #populate Arrays with SAM data
     def populateArray(self):
         with open(self.sam, 'r') as samFile:
             for line in samFile:
@@ -101,24 +102,16 @@ class metaGenePlot:
                         chrom = chrom[0:4]
                     else:
                         chrom = chrom[0:5]
-                   
+
                     end = start + seqLength -1 
-                  
-                    try:   
+                    try:    #try to find the chromosomes defined in the GFF, else throw incompatible error and end run
                         for i in range(start-1, end):
-                        
                                 self.chromDict[chrom][i]+= 1
                     except: 
                         print("Please ensure input files are compatible.")
                         break 
                         
         samFile.close()
-
-    def testArrays(self):
-        self.setArray()
-        self.populateArray()
-        print(self.chromDict['chrI'])
-
     
     # #pull gff arrays
     def getGffArray(self):
@@ -152,12 +145,10 @@ class metaGenePlot:
                            upStream.append(0)
 
                     if  cols[6]=='-':
-                       # print('original ', currArray)
                         currArray = invertArray(currArray) #invert feature array
-                        temp= invertArray(dwnStream) #invert and flip up/down stream
+                        temp= invertArray(dwnStream) #invert and flip up/down stream 
                         dwnStream = invertArray(upStream)
                         upStream = temp
-                        #print('inverted ',currArray )
                     if zeros == True: 
                         print(cols[6])
                     upDownStream.append((dwnStream,upStream))
@@ -169,23 +160,11 @@ class metaGenePlot:
         self.upDownStream = upDownStream
         self.gffArrays= gffArrays
         self.names=names
-        # for i in range(10): 
-        #     print(len(self.upDownStream[i][0]) , len(self.upDownStream[i][1]))
-    
-    def testgffArrays(self):
-        self.setArray()
-        self.populateArray()
-        self.getGffArray()
-        print('gffLength:', len(self.gffArrays))
-        lengths= []
-        for el in self.gffArrays:
-            length = len(el)
-            lengths.append(length) 
-        print(lengths)    
+   
     
     # #normalize gff arrays to same length 
     def normalizeArray(self, targetLength):
-        if targetLength== 'avg': 
+        if targetLength== 'avg':  #find average array length
             avg = 0 
             for array in self.gffArrays:
                 avg+= len(array)
@@ -194,7 +173,6 @@ class metaGenePlot:
         
         graphArrays =[]
         for array in self.gffArrays:
-            
             currArray=[]
             stepSize = len(array)/targetLength
             step = 0
@@ -215,11 +193,9 @@ class metaGenePlot:
                             weight2 = ((step-math.ceil(prev))/stepSize)*array[int(math.floor(step))]
                         else:
                             weight2 = ((step-math.ceil(prev))/stepSize)*array[int(math.floor(step)-1)]
-                        #print(weight1, weight2 )
-
+                     
                         avg = weight1 + weight2
-                        currArray.append(avg)
-                    
+                        currArray.append(avg)    
 
                     else: #not a whole number step but hasnt crossed an integer 
                         currArray.append(array[int(math.floor(step))])
@@ -280,25 +256,24 @@ class metaGenePlot:
         print("Normalizing feature length...")
         trendData=self.normalizeArray(length)
 
-        if numClusters==1: 
+        if numClusters==1: #for one cluster just average all data
             avgArray=averageArray(trendData)
             avgDown,avgUp = averageUpDown(self.upDownStream)
            
             print("Plotting data...")
             name=self.gff[0:-4]+' '+self.feature
-            if self.upDown> 0:
+            if self.upDown> 0: #include existing up/down stream data
                 print(len(avgDown), len(avgArray),len(avgUp))
                 fullArray = avgDown+avgArray+avgUp 
             else:
                 fullArray = avgArray
             genPlot(fullArray,name,self.upDown)
             return
-        elif(numClusters =='auto'): 
+        elif(numClusters =='auto'):  #find the optimal number of cluster for the given data
             print("Fitting data...") 
             print('features:', len(trendData))
             clusters = autoKCluster(trendData)
-        else: #divide data into clusters
-
+        else: #divide data into fixed number clusters
             print("Fitting data...")
             clusters, distance = kCluster(numClusters, trendData)
            
@@ -307,12 +282,10 @@ class metaGenePlot:
             clusterData = []
             featureNames=[]
             name=self.gff[0:-4]+' '+self.feature+' cluster '+str(i)
-            for feature in cluster:
-                
+            for feature in cluster: 
                 featureNames.append(self.names[feature])
                 if self.upDown> 0 and clusterUpDown==False:
-                    clusterData = self.upDownStream[feature][0]+trendData[feature]+self.upDownStream[feature][1]
-                    
+                    clusterData = self.upDownStream[feature][0]+trendData[feature]+self.upDownStream[feature][1]      
                 else:
                     clusterData.append(trendData[feature])
 
