@@ -2,12 +2,11 @@
 from audioop import avg
 import math
 from operator import inv
-
-
 from numpy import full
 from kMeansClustering import autoKCluster, kCluster 
 from plot import genPlot
 from writeExcel import wtExcell
+import os 
 
 #invert feature array
 def invertArray(feature): 
@@ -54,7 +53,7 @@ def averageUpDown(upDownStream):
 
 #a class to create metagene plots based on SAM and GFF/GFT
 class metaGenePlot:
-    def __init__(self,sam_file, gff_file, featureType, udStream = 0):
+    def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0):
         self.sam = sam_file 
         self.gff = gff_file
         self.feature= featureType
@@ -92,9 +91,12 @@ class metaGenePlot:
         self.chromDict = chromDict   
 
     #populate Arrays with SAM data
-    def populateArray(self):
+    def populateArray(self): 
         with open(self.sam, 'r') as samFile:
-            for line in samFile:
+            progress = 0 
+            size = os.path.getsize(self.sam)
+    
+            for i,line in enumerate(samFile): #add progress tracker percent based off file length at every 100 lines
                 cols = line.split('\t')
                 if len(cols)>=10:
                     chrom,start,seqLength= cols[2],int(cols[3]),len(cols[9]) #get chrom number, postion and sequence length
@@ -110,8 +112,17 @@ class metaGenePlot:
                     except: 
                         print("Please ensure input files are compatible.")
                         break 
+                    
+                    progress += len(bytes(line, encoding='utf-8'))
+                    if i%10000 == 0: #track percent complete
+                        completion = (progress/size)*100
+                        print('\r            \r', end='',flush=True)
+                        print("Populating chromosomes... "+ str(round(completion,2)) + '% ', end='',flush=True)
                         
         samFile.close()
+        print('\r            \r', end='',flush=True)
+        print("Populating chromosomes... "+ "Done")
+                        
     
     # #pull gff arrays
     def getGffArray(self):
@@ -149,8 +160,8 @@ class metaGenePlot:
                         temp= invertArray(dwnStream) #invert and flip up/down stream 
                         dwnStream = invertArray(upStream)
                         upStream = temp
-                    if zeros == True: 
-                        print(cols[6])
+                    # if zeros == True: 
+                    #     print(cols[6])
                     upDownStream.append((dwnStream,upStream))
                     gffArrays.append(currArray)
                     names.append(cols[8])
@@ -242,20 +253,22 @@ class metaGenePlot:
 
     # #average normalized gff arrays (see top) 
 
-    def plot(self, numClusters,length, clusterUpDown =False): #call to generate plot(s) after creating metaGenePlot object
+    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False): #call to generate plot(s) after creating metaGenePlot object
 
         print("Setting chromosome arrays...")
         self.setArray()
         print(list((self.chromDict.keys())))
-        print("Populating chromosomes...")
+
+        print("Populating chromosomes...", end="")
         self.populateArray()
 
-        print("Identifying signals of interest...")
+        print("\nIdentifying signals of interest...")
         self.getGffArray()
 
         print("Normalizing feature length...")
         trendData=self.normalizeArray(length)
-
+        #if self.upDown > 0 and clusterUpDown == True: # cluster upDpwn
+      
         if numClusters==1: #for one cluster just average all data
             avgArray=averageArray(trendData)
             avgDown,avgUp = averageUpDown(self.upDownStream)
@@ -285,7 +298,8 @@ class metaGenePlot:
             for feature in cluster: 
                 featureNames.append(self.names[feature])
                 if self.upDown> 0 and clusterUpDown==False:
-                    clusterData = self.upDownStream[feature][0]+trendData[feature]+self.upDownStream[feature][1]      
+                    featureData = self.upDownStream[feature][0]+trendData[feature]+self.upDownStream[feature][1]
+                    clusterData.append(featureData)      
                 else:
                     clusterData.append(trendData[feature])
 

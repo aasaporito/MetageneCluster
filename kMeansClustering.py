@@ -46,7 +46,7 @@ def isStable(memory):#return bool
     numMovers=memory[-1]
     print('movers:',numMovers)
     
-    if  numMovers == 0 or (len(memory)>2 and (abs(memory[-2] - memory[-1] )<= .1*memory[-2])):
+    if  numMovers == 0 or (len(memory)>2 and (abs(memory[-2] - memory[-1] )<= .1*memory[-2]) and memory[-1]<.25*max(memory)): #another condition based on max movers? 
         return True 
        
         # if numMovers == 0:
@@ -93,7 +93,7 @@ def finalDistance(clusters, clusterCenters, data):
 
    
 def kCluster(numClusters, data): #
-    clusters=[] #an array of feature indexes belong to each cluster 
+    clusters=[] #an array of feature indexes belonging to each cluster 
     clusterCenters=[] # a center for each position of each cluster
     prev=[] #tracks the previous location of each feature 
     
@@ -145,7 +145,6 @@ def kCluster(numClusters, data): #
                 if prev[i]!= cluster:
                     movers+=1
                     prev[i] = cluster
-
 
         #calc new centers for each cluster
         for i,cluster in enumerate(clusters):    
