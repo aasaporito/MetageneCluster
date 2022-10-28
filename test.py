@@ -6,11 +6,11 @@ from plot import genPlot
 from datapros import invertArray 
 
 
+#sort / require sorted files by chromosome, collect data for one chromosome at a time 
 
 
-
-test = metaGenePlot('RPKM_alignments.sam','saccharomyces_cerevisiae.gff','gene', 100) #single para, if single = true - provide input for left or right end (if exists)
-test.plot( 3,1000)
+test = metaGenePlot('RPKM_alignments.sam','saccharomyces_cerevisiae.gff','gene', 0) #single para, if single = true - provide input for left or right end (if exists)
+test.plot( 1,1000)
  
 # labels = []
 # with open('SRR20274751_HUMAN.sam', 'r') as samFile:

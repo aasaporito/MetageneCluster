@@ -21,14 +21,20 @@ def invertArray(feature):
 #average feature arrays at each index
 def averageArray(graphArrays):
     avgArray = []
-    for i in range(len(graphArrays[0])):
-        avgArray.append(0)
+    # for i in range(len(graphArrays[0])):
+    #     avgArray.append(0)
     numArray =  len(graphArrays)
-    for array in graphArrays:
-        for i in range(len(array)): 
-            avgArray[i]+= array[i]
-    for j in range(len(avgArray)):
-        avgArray[j]=avgArray[j]/numArray
+    # for array in graphArrays:       ###!!!
+    #     for i in range(len(array)): 
+    #         avgArray[i]+= array[i]
+    # for j in range(len(avgArray)):
+    #     avgArray[j]=avgArray[j]/numArray
+
+    for i in range(len(graphArrays[0])):
+        indxTot=0
+        for array in graphArrays: 
+            indxTot+= array[i]
+        avgArray.append(indxTot/numArray)
     return avgArray
 
 #average up/down arrays
@@ -50,8 +56,12 @@ def averageUpDown(upDownStream):
 
     return downArray , upArray
 
-
+#def makeData(sam, gff, feature, udStream): 
+    
 #a class to create metagene plots based on SAM and GFF/GFT
+#move up to get feature/gff arrays 
+
+#requires sorted sam/gff 
 class metaGenePlot:
     def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0):
         self.sam = sam_file 
@@ -62,115 +72,123 @@ class metaGenePlot:
         self.upDown = udStream
         #self.chromDict, self.romanNums = setArray(self.gff, self.feature)
 
-
-    #build chromosome arrays from gff
-    def setArray(self):
+    def sort(self):
+        x=0
+    def fetchData(self): 
         numArrays= 0 
         maxLength = 0 #add maxLength for each unique chrom 
         currChrom=''
         chromDict={}
-        romanNums = False
-        with open(self.gff, "r") as gffFile:
-            for line in gffFile:
-                cols = line.split('\t')
+        
+    #build chromosome arrays from gff
+    # def setArray(self):
+    #     numArrays= 0 
+    #     maxLength = 0 #add maxLength for each unique chrom 
+    #     currChrom=''
+    #     chromDict={}
+    #     romanNums = False
+    #     with open(self.gff, "r") as gffFile:
+    #         for line in gffFile:
+    #             cols = line.split('\t')
                
-                if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
-                    #print(cols[3], cols[4]
-                    if int(cols[4]) > maxLength: #farthest poi in chromosome
-                            maxLength=int(cols[4])
-                    if cols[0]!= currChrom: # crhomosome number
-                        currChrom=cols[0] 
-                        numArrays+= 1
-                        chromDict[cols[0]]=[] #create new dict entry for each chrom
-        gffFile.close()
-        for key in chromDict:
-            arrLen= []
-            for i in range(maxLength):
-                arrLen.append(0)
-            chromDict[key]= arrLen #initialize each chrom array with 0s to len(maxLength)
-        self.chromDict = chromDict   
+    #             if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
+    #                 #print(cols[3], cols[4]
+    #                 if int(cols[4]) > maxLength: #farthest poi in chromosome
+    #                         maxLength=int(cols[4])
+    #                 if cols[0]!= currChrom: # crhomosome number
+    #                     currChrom=cols[0] 
+    #                     numArrays+= 1
+    #                     chromDict[cols[0]]=[] #create new dict entry for each chrom
+    #     gffFile.close()
+    #     for key in chromDict:
+    #         arrLen= []
+    #         for i in range(maxLength):
+    #             arrLen.append(0)
+    #         chromDict[key]= arrLen #initialize each chrom array with 0s to len(maxLength)
+    #     self.chromDict = chromDict   
 
-    #populate Arrays with SAM data
-    def populateArray(self): 
-        with open(self.sam, 'r') as samFile:
-            progress = 0 
-            size = os.path.getsize(self.sam)
+    # #populate Arrays with SAM data
+    # def populateArray(self): 
+    #     with open(self.sam, 'r') as samFile:
+    #         #init progress tracking vars
+    #         progress = 0 
+    #         size = os.path.getsize(self.sam)
     
-            for i,line in enumerate(samFile): #add progress tracker percent based off file length at every 100 lines
-                cols = line.split('\t')
-                if len(cols)>=10:
-                    chrom,start,seqLength= cols[2],int(cols[3]),len(cols[9]) #get chrom number, postion and sequence length
-                    if chrom[3] =='Y' or chrom[3] =='X': 
-                        chrom = chrom[0:4]
-                    else:
-                        chrom = chrom[0:5]
+    #         for i,line in enumerate(samFile): 
+    #             cols = line.split('\t')
+    #             if len(cols)>=10:
+    #                 chrom,start,seqLength= cols[2],int(cols[3]),len(cols[9]) #get chrom number, postion and sequence length
+    #                 if chrom[3] =='Y' or chrom[3] =='X': 
+    #                     chrom = chrom[0:4]
+    #                 else:
+    #                     chrom = chrom[0:5]
 
-                    end = start + seqLength -1 
-                    try:    #try to find the chromosomes defined in the GFF, else throw incompatible error and end run
-                        for i in range(start-1, end):
-                                self.chromDict[chrom][i]+= 1
-                    except: 
-                        print("Please ensure input files are compatible.")
-                        break 
+    #                 end = start + seqLength -1 
+    #                 try:    #try to find the chromosomes defined in the GFF, else throw incompatible error and end run
+    #                     for i in range(start-1, end):
+    #                             self.chromDict[chrom][i]+= 1
+    #                 except: 
+    #                     print("Please ensure input files are compatible.")
+    #                     break 
                     
-                    progress += len(bytes(line, encoding='utf-8'))
-                    if i%10000 == 0: #track percent complete
-                        completion = (progress/size)*100
-                        print('\r            \r', end='',flush=True)
-                        print("Populating chromosomes... "+ str(round(completion,2)) + '% ', end='',flush=True)
+    #                 ####track percent complete####
+    #                 progress += len(bytes(line, encoding='utf-8'))
+    #                 if i%10000 == 0: 
+    #                     completion = (progress/size)*100
+    #                     print('\r            \r', end='',flush=True)
+    #                     print("Populating chromosomes... "+ str(round(completion,2)) + '% ', end='',flush=True)
                         
-        samFile.close()
-        print('\r            \r', end='',flush=True)
-        print("Populating chromosomes... "+ "Done")
+    #     samFile.close()
+        
+    #     print('\r  Populating chromosomes... Done    \r', end='',flush=True)
+    #     ##("Populating chromosomes... "+ "Done")
                         
-    
-    # #pull gff arrays
-    def getGffArray(self):
-        gffArrays = []
-        names=[]
-        upDownStream= [] # 2d array, first is down (left) second is up (right) corresponding to the gffArray of the same index
-        with open(self.gff, "r") as gffFile:
-            for line in gffFile:
-                cols = line.split('\t')
+    # # #pull gff arrays
+    # def getGffArray(self):
+    #     gffArrays = []
+    #     names=[]
+    #     upDownStream= [] # 2d array, first is down (left) second is up (right) corresponding to the gffArray of the same index
+    #     with open(self.gff, "r") as gffFile:
+    #         for line in gffFile:
+    #             cols = line.split('\t')
 
-                if len(cols)>1  and cols[2]== self.feature:# and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
-                    currArray=[]
-                    dwnStream = []
-                    upStream =[]
-                    zeros = True
-                    chrom, start, end = cols[0], int(cols[3])-1 , int(cols[4])-1 # get chromosome, start/end locations
-                    down = start- self.upDown
-                    up = end + self.upDown
+    #             if len(cols)>1  and cols[2]== self.feature and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
+    #                 currArray=[]
+    #                 dwnStream = []
+    #                 upStream =[]
+    #                 chrom, start, end = cols[0], int(cols[3])-1 , int(cols[4])-1 # get chromosome, start/end locations
+    #                 down = start- self.upDown
+    #                 up = end + self.upDown
 
-                    for i in range(start, end):
-                        currArray.append(self.chromDict[chrom][i])#pull the values from the chromDIct to build new array
-                        if self.chromDict[chrom][i]!=0:
-                            zeros = False
-                    for i in range(down, start):
-                        dwnStream.append(self.chromDict[chrom][i])
+    #                 #get feature values 
+    #                 for i in range(start, end):
+    #                     currArray.append(self.chromDict[chrom][i])#pull the values from the chromDIct to build new array
+    #                     if self.chromDict[chrom][i]!=0:
+    #                         zeros = False
+    #                 #get down stream values 
+    #                 for i in range(down, start):
+    #                     dwnStream.append(self.chromDict[chrom][i])
+    #                 #get up stream values 
+    #                 for i in range(end, up):
+    #                     try:
+    #                         upStream.append(self.chromDict[chrom][i])
+    #                     except: 
+    #                        upStream.append(0)
 
-                    for i in range(end, up):
-                        try:
-                            upStream.append(self.chromDict[chrom][i])
-                        except: 
-                           upStream.append(0)
-
-                    if  cols[6]=='-':
-                        currArray = invertArray(currArray) #invert feature array
-                        temp= invertArray(dwnStream) #invert and flip up/down stream 
-                        dwnStream = invertArray(upStream)
-                        upStream = temp
-                    # if zeros == True: 
-                    #     print(cols[6])
-                    upDownStream.append((dwnStream,upStream))
-                    gffArrays.append(currArray)
-                    names.append(cols[8])
+    #                 if  cols[6]=='-':
+    #                     currArray = invertArray(currArray) #invert feature array
+    #                     temp= invertArray(dwnStream) #invert and flip up/down stream 
+    #                     dwnStream = invertArray(upStream)
+    #                     upStream = temp
+    #                 upDownStream.append((dwnStream,upStream))
+    #                 gffArrays.append(currArray)
+    #                 names.append(cols[8])
                     
 
-        gffFile.close()
-        self.upDownStream = upDownStream
-        self.gffArrays= gffArrays
-        self.names=names
+    #     gffFile.close()
+    #     self.upDownStream = upDownStream
+    #     self.gffArrays= gffArrays
+    #     self.names=names
    
     
     # #normalize gff arrays to same length 
@@ -270,12 +288,12 @@ class metaGenePlot:
         #if self.upDown > 0 and clusterUpDown == True: # cluster upDpwn
       
         if numClusters==1: #for one cluster just average all data
-            avgArray=averageArray(trendData)
-            avgDown,avgUp = averageUpDown(self.upDownStream)
+            avgArray=averageArray(trendData)  
            
             print("Plotting data...")
             name=self.gff[0:-4]+' '+self.feature
             if self.upDown> 0: #include existing up/down stream data
+                avgDown,avgUp = averageUpDown(self.upDownStream)
                 print(len(avgDown), len(avgArray),len(avgUp))
                 fullArray = avgDown+avgArray+avgUp 
             else:

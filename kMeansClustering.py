@@ -48,13 +48,7 @@ def isStable(memory):#return bool
     
     if  numMovers == 0 or (len(memory)>2 and (abs(memory[-2] - memory[-1] )<= .1*memory[-2]) and memory[-1]<.25*max(memory)): #another condition based on max movers? 
         return True 
-       
-        # if numMovers == 0:
-        #     return True
-        # elif (changeInMovers<= .1*memory[-2]) and (numMovers<= .01 * memory[0]):
-        #     return True
-        # else: 
-        #     return False   
+
     return False
 
 def init(numClusters,data):

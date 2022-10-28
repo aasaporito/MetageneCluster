@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+
+##add up/down stream markers
 def genPlot(result,name,udStream):
     if udStream == 0: 
         markers = [] 
@@ -17,7 +19,7 @@ def genPlot(result,name,udStream):
         #y[i] = result[i]
     y= result
 
-    # make the data
+    # ?? 
     np.random.seed(5)
 
     # plot
