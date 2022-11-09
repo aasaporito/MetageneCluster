@@ -56,31 +56,89 @@ def averageUpDown(upDownStream):
 
     return downArray , upArray
 
-#def makeData(sam, gff, feature, udStream): 
+#def makeData(sam, gff, feature, udStream): #get data one chromosome at a time  (((add to parse data?)))
+    #read gff first time to get chrom names and sizes for all chromosomes
     
+    #for each chrome 
+    # create chrome array with length from gff
+    #populate from sam 
+    # pull respective areas from gff 
+    #normalize and add to graph data
 #a class to create metagene plots based on SAM and GFF/GFT
 #move up to get feature/gff arrays 
 
 #requires sorted sam/gff 
 class metaGenePlot:
-    def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0):
-        self.sam = sam_file 
-        self.gff = gff_file
+    def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sort=False):
+        self.__parseData(sam_file,gff_file) #set file variables
+        # self.sam = sam_file 
+        # self.gff = gff_file
         self.feature= featureType
         self.names=[]
-        self.chromDict={} 
         self.upDown = udStream
-        #self.chromDict, self.romanNums = setArray(self.gff, self.feature)
+        #self.sort()
+        self.data = None
+      
+    # def sort(self): #sort input file variables by chromosome
+    #     print('ok')
+    def __pasrseData(self,sam,gff,feature,udStream): 
+        # numArrays= 0 
+        # currChrom=''
+        # chromNames=[]
+        with open(sam, 'r') as samFile:
+            self.samLines = samFile.readlines()
+        samFile.close()
+        with open(gff) as gffFile: 
+            self.gffLines = gffFile.readlines()
+        gffFile.close()
 
-    def sort(self):
-        x=0
-    def fetchData(self): 
-        numArrays= 0 
-        maxLength = 0 #add maxLength for each unique chrom 
-        currChrom=''
-        chromDict={}
+        #probably would need to sort here .. split into two methods 
+
+    def __getChromLength(self):
+        #find chromosomes and lengths get size from 1st chromosome add updown stream length to that length 
+        maxLength = 0
+        for line in self.gffLines:
+            cols = line.split('\t')
+            
+            if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
+                #print(cols[3], cols[4]
+                if int(cols[4]) > maxLength: #farthest poi in chromosome
+                        maxLength=int(cols[4])
+                if cols[0]!= currChrom: # crhomosome number
+                    currChrom=cols[0] 
+                    numArrays+= 1
+                    chromDict[cols[0]]=[] #create new dict entry for each chrom
+        self.__chrom = []
+        for i in range(maxLength+self.upDown): 
+            self.__chrom.append(0)
+            
+
+    def __populateChromosome(self,loc,chrom): 
+        i = loc
+        while currChrom == chrom: 
+            
+            i+=1 #go to next line
+    def __getGffArrays(self,loc,chrom): # 
+        i = loc 
+        while currChrom ==chrom: 
+
+            i+=1 
+
+
         
-    #build chromosome arrays from gff
+    def buildData(self, chromNames):  #private? 
+        gffLoc = 0  #track place in files 
+        samLoc = 0 
+        for chrom in chromNames:
+            currChrom = chrom 
+            nextChrom = chrom 
+            #populate with sam data 
+            while nextChrom == currChrom:  
+            #pull gffArrays
+            #add to self.data 
+            #reset chrom -> move to next
+        #normalize as usual
+
     # def setArray(self):
     #     numArrays= 0 
     #     maxLength = 0 #add maxLength for each unique chrom 
@@ -192,7 +250,7 @@ class metaGenePlot:
    
     
     # #normalize gff arrays to same length 
-    def normalizeArray(self, targetLength):
+    def __normalizeArray(self, targetLength):
         if targetLength== 'avg':  #find average array length
             avg = 0 
             for array in self.gffArrays:
