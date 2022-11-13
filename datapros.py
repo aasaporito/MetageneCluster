@@ -67,76 +67,173 @@ def averageUpDown(upDownStream):
 #a class to create metagene plots based on SAM and GFF/GFT
 #move up to get feature/gff arrays 
 
-#requires sorted sam/gff 
+#requires sorted sam/gff with compatible chromosome labels 
 class metaGenePlot:
     def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sort=False):
         self.__parseData(sam_file,gff_file) #set file variables
         # self.sam = sam_file 
         # self.gff = gff_file
         self.feature= featureType
-        self.names=[]
-        self.upDown = udStream
+        self.names=[] #names of instances of given feature 
+        self.__upDown = udStream
         #self.sort()
-        self.data = None
+        self.data = []
+        self.__progress = 0 #track progress of data collecting
+        self.__chrom=None 
+        self.__upDownStream=[]
+        
       
     # def sort(self): #sort input file variables by chromosome
     #     print('ok')
-    def __pasrseData(self,sam,gff,feature,udStream): 
-        # numArrays= 0 
-        # currChrom=''
-        # chromNames=[]
+    def __pasrseData(self,sam,gff): 
+
         with open(sam, 'r') as samFile:
             self.samLines = samFile.readlines()
         samFile.close()
+        self.__samSize= len( self.samLines)
+
         with open(gff) as gffFile: 
             self.gffLines = gffFile.readlines()
         gffFile.close()
+        self.__gffSize= len( self.gffLines)
 
         #probably would need to sort here .. split into two methods 
 
     def __getChromLength(self):
-        #find chromosomes and lengths get size from 1st chromosome add updown stream length to that length 
+        #find length of first chrom... assuming it's the longest one 
         maxLength = 0
+        firstChrom = None
         for line in self.gffLines:
             cols = line.split('\t')
             
-            if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
-                #print(cols[3], cols[4]
-                if int(cols[4]) > maxLength: #farthest poi in chromosome
-                        maxLength=int(cols[4])
-                if cols[0]!= currChrom: # crhomosome number
-                    currChrom=cols[0] 
-                    numArrays+= 1
-                    chromDict[cols[0]]=[] #create new dict entry for each chrom
+            if (len(cols)>1) and (int(cols[4]) > maxLength) and (firstChrom==None or cols[0]==firstChrom): #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
+                #if int(cols[4]) > maxLength: #farthest poi in chromosome
+                maxLength=int(cols[4])
+                if firstChrom==None: 
+                    firstChrom = cols[0] 
+
+            elif len(cols)>1 and  cols[0]!=firstChrom: #
+                break
+        #initialize nt positions
         self.__chrom = []
         for i in range(maxLength+self.upDown): 
             self.__chrom.append(0)
+
+        return firstChrom #to initialize chromosome search in files 
             
 
-    def __populateChromosome(self,loc,chrom): 
+    def __populateChromosome(self,loc,currChrom): #get sam data for current chrom 
         i = loc
-        while currChrom == chrom: 
-            
-            i+=1 #go to next line
-    def __getGffArrays(self,loc,chrom): # 
-        i = loc 
-        while currChrom ==chrom: 
+        firstLine =self.__samLines[loc]
+        nextCols = firstLine.split('\t') 
+        nextChrom = currChrom
 
+        while nextChrom == currChrom: 
+            if i//1000 == 0: #track progress
+                completion = (i/self.__samSize)*100
+                print('\r            \r', end='',flush=True)
+                print("Populating chromosomes... "+ str(round(completion,2)) + '% ', end='',flush=True)
+                
+            cols = nextCols
+            if len(cols)>=10:
+                start,seqLength= int(cols[3]),len(cols[9]) # postion and sequence length
+                end = start + seqLength -1
+                for j in range(start-1, end):
+                    self.__chrom[j]+= 1
+
+            #go to next line
             i+=1 
+            if i < len(self.__samLines): 
+                nextLine = self.__samLines[i]
+                nextCols = nextLine.split('\t')
+                nextChrom = cols[2]
+            else: #reached end of doc
+                nextChrom = None
+
+        return nextChrom, i 
 
 
+    def __getGffArrays(self,loc,currChrom): # find feature arrays in curr chrom and add to data
+        upDownStream= [] # 2d array, first is down (left) second is up (right) corresponding to the gffArray of the same index
+        i = loc
+        firstLine =self.__gffLines[loc]
+        nextChrom = currChrom
+        while nextChrom ==currChrom: 
+
+            cols = nextCols
+            if len(cols)>1  and cols[2]== self.feature #and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
+                currArray=[]
+                dwnStream = []
+                upStream =[]
+                start, end =  int(cols[3])-1 , int(cols[4])-1 # get chromosome, start/end locations
+                down = start- self.upDown
+                up = end + self.upDown
+
+                #get feature values 
+                for i in range(start, end):
+                    currArray.append(self.__chrom[i])#pull the values from the chromDIct to build new array
+
+                #get down stream values 
+                for i in range(down, start):
+                    dwnStream.append(self.__chrom[i])
+                #get up stream values 
+                for i in range(end, up):
+                    try:
+                        upStream.append(self.chromDict[chrom][i])
+                    except: 
+                        upStream.append(0)
+
+                if  cols[6]=='-':
+                    currArray = invertArray(currArray) #invert feature array
+                    temp= invertArray(dwnStream) #invert and flip up/down stream 
+                    dwnStream = invertArray(upStream)
+                    upStream = temp
+
+
+                self.__upDownStream.append((dwnStream,upStream))
+                self.data.append(currArray)
+                self.names.append(cols[8])
+                
+                #go to next line
+                i+=1 
+                if i < len(self.__gffLines): 
+                    nextLine = self.__gffLines[i]
+                    nextCols = nextLine.split('\t')
+                    nextChrom =  cols[0]
+                else: #reached end of file
+                    nextChrom =None  
+
+        return nextChrom, i 
         
-    def buildData(self, chromNames):  #private? 
+    def buildData(self, chromNames):  #private?
+        #initialize chrom 
+        currChrom = self.__getChromLength() 
         gffLoc = 0  #track place in files 
         samLoc = 0 
-        for chrom in chromNames:
-            currChrom = chrom 
-            nextChrom = chrom 
-            #populate with sam data 
-            while nextChrom == currChrom:  
-            #pull gffArrays
-            #add to self.data 
-            #reset chrom -> move to next
+        end = False
+        while end == False: #for each chromosome
+            #populate self.__chrom  with sam data  
+            nextSamChrom , nextSamLoc = self.__populateChromosome(samLoc, currChrom)
+
+            #pull gffArrays and add to self.data 
+            nextGffChrom, nextGffLoc = self.__getGffArrays(gffLoc, currChrom)
+           
+            #check for compatibility 
+            if nextGffChrom!= nextSamChrom:
+                print("Please ensure input files are sorted and compatible.")
+                break 
+            else: #reset chrom -> move to next
+                currChrom = nextSamChrom
+                samLoc = nextSamLoc
+                gffLoc = nextGffLoc 
+                
+                for i in range(len(self.__chrom)): 
+                    self.__chrom[i] = 0 
+
+            #check for end of file
+            if gffLoc >= len(self.__gffLines) and samLoc>= len(self.__samLines): 
+                end = True
+
         #normalize as usual
 
     # def setArray(self):
@@ -149,7 +246,7 @@ class metaGenePlot:
     #         for line in gffFile:
     #             cols = line.split('\t')
                
-    #             if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
+    #             if len(cols)>1: #and  (cols[6]=='+' ):#or cols[6] == '-') :#skip the rows at the bottom 
     #                 #print(cols[3], cols[4]
     #                 if int(cols[4]) > maxLength: #farthest poi in chromosome
     #                         maxLength=int(cols[4])
