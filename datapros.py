@@ -1,12 +1,10 @@
 
-from audioop import avg
+
 import math
-from operator import inv
-from numpy import full
 from kMeansClustering import autoKCluster, kCluster 
 from plot import genPlot
 from writeExcel import wtExcell
-import os 
+
 
 #invert feature array
 def invertArray(feature): 
@@ -56,20 +54,10 @@ def averageUpDown(upDownStream):
 
     return downArray , upArray
 
-#def makeData(sam, gff, feature, udStream): #get data one chromosome at a time  (((add to parse data?)))
-    #read gff first time to get chrom names and sizes for all chromosomes
-    
-    #for each chrome 
-    # create chrome array with length from gff
-    #populate from sam 
-    # pull respective areas from gff 
-    #normalize and add to graph data
 #a class to create metagene plots based on SAM and GFF/GFT
-#move up to get feature/gff arrays 
-
 #requires sorted sam/gff with compatible chromosome labels 
 class metaGenePlot:
-    def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sort=False):
+    def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sorted=True):
         self.__parseData(sam_file,gff_file) #set file variables
         # self.sam = sam_file 
         # self.gff = gff_file
@@ -77,14 +65,17 @@ class metaGenePlot:
         self.names=[] #names of instances of given feature 
         self.__upDown = udStream
         #self.sort()
-        self.data = []
+        self.data = [] #raw data 
+        self.plotData = [] #normalized data 
         self.__progress = 0 #track progress of data collecting
         self.__chrom=None 
         self.__upDownStream=[]
         
       
     # def sort(self): #sort input file variables by chromosome
-    #     print('ok')
+    #  
+
+
     def __pasrseData(self,sam,gff): 
 
         with open(sam, 'r') as samFile:
@@ -97,7 +88,7 @@ class metaGenePlot:
         gffFile.close()
         self.__gffSize= len( self.gffLines)
 
-        #probably would need to sort here .. split into two methods 
+    
 
     def __getChromLength(self):
         #find length of first chrom... assuming it's the longest one 
@@ -129,10 +120,10 @@ class metaGenePlot:
         nextChrom = currChrom
 
         while nextChrom == currChrom: 
-            if i//1000 == 0: #track progress
-                completion = (i/self.__samSize)*100
-                print('\r            \r', end='',flush=True)
-                print("Populating chromosomes... "+ str(round(completion,2)) + '% ', end='',flush=True)
+            # if i//1000 == 0: #track progress
+            #     completion = (i/self.__samSize)*100
+            #     print('\r            \r', end='',flush=True)
+            #     print("Populating chromosomes... "+ str(round(completion,2)) + '% ', end='',flush=True)
                 
             cols = nextCols
             if len(cols)>=10:
@@ -161,7 +152,7 @@ class metaGenePlot:
         while nextChrom ==currChrom: 
 
             cols = nextCols
-            if len(cols)>1  and cols[2]== self.feature #and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
+            if len(cols)>1  and cols[2]== self.feature: #and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
                 currArray=[]
                 dwnStream = []
                 upStream =[]
@@ -179,7 +170,7 @@ class metaGenePlot:
                 #get up stream values 
                 for i in range(end, up):
                     try:
-                        upStream.append(self.chromDict[chrom][i])
+                        upStream.append(self.__chrom[i])
                     except: 
                         upStream.append(0)
 
@@ -205,13 +196,14 @@ class metaGenePlot:
 
         return nextChrom, i 
         
-    def buildData(self, chromNames):  #private?
-        #initialize chrom 
-        currChrom = self.__getChromLength() 
+    def buildData(self):  #private?    gather plot data one chromosome at a time
+        
+        currChrom = self.__getChromLength() #initialize chrom 
         gffLoc = 0  #track place in files 
         samLoc = 0 
+
         end = False
-        while end == False: #for each chromosome
+        while end == False: #for each chromosome/until end of files is reached
             #populate self.__chrom  with sam data  
             nextSamChrom , nextSamLoc = self.__populateChromosome(samLoc, currChrom)
 
@@ -223,6 +215,7 @@ class metaGenePlot:
                 print("Please ensure input files are sorted and compatible.")
                 break 
             else: #reset chrom -> move to next
+                print(currChrom, ' completed')
                 currChrom = nextSamChrom
                 samLoc = nextSamLoc
                 gffLoc = nextGffLoc 
@@ -235,6 +228,10 @@ class metaGenePlot:
                 end = True
 
         #normalize as usual
+
+
+
+###----------------------- old way of building data that I don't wanna get rid of just in case --------------------------###
 
     # def setArray(self):
     #     numArrays= 0 
@@ -344,8 +341,12 @@ class metaGenePlot:
     #     self.upDownStream = upDownStream
     #     self.gffArrays= gffArrays
     #     self.names=names
-   
+
+###---------------------------------------------------------------------------------------------------------------###
     
+
+
+
     # #normalize gff arrays to same length 
     def __normalizeArray(self, targetLength):
         if targetLength== 'avg':  #find average array length
@@ -428,15 +429,16 @@ class metaGenePlot:
 
     def plot(self, numClusters:int,length:int, clusterUpDown:bool =False): #call to generate plot(s) after creating metaGenePlot object
 
-        print("Setting chromosome arrays...")
-        self.setArray()
-        print(list((self.chromDict.keys())))
+        # print("Setting chromosome arrays...")
+        # self.setArray()
+        # print(list((self.chromDict.keys())))
 
-        print("Populating chromosomes...", end="")
-        self.populateArray()
+        # print("Populating chromosomes...", end="")
+        # self.populateArray()
 
-        print("\nIdentifying signals of interest...")
-        self.getGffArray()
+        # print("\nIdentifying signals of interest...")
+        # self.getGffArray()
+        self.buildData()
 
         print("Normalizing feature length...")
         trendData=self.normalizeArray(length)
