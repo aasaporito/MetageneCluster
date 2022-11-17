@@ -1,5 +1,5 @@
 import random
-
+#this is currently really slow for some reason 
 def calcMax(data):
     mxs=[]
     for i in range(len(data[0])):
