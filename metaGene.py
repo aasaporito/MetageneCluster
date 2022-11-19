@@ -53,27 +53,26 @@ def averageUpDown(upDownStream):
     return downArray , upArray
 
 #a class to create metagene plots based on SAM and GFF/GFT
-#requires sorted sam/gff with compatible chromosome labels 
+#requires compatible chromosome labels 
 class metaGenePlot:
     def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sorted=True):
         self.__samLines, self.__gffLines=self.__parseData(sam_file,gff_file) #set file variables
         self.__samLength = len(self.__samLines)#for tracking progress 
         self.__gffLength = len(self.__gffLines)
-        self.gff = gff_file
+        self.gff = gff_file #file names
         self.sam = sam_file
-        self.feature= featureType
+        self.feature= featureType 
         self.names=[] #names of instances of given feature 
-        self.__upDown = udStream
+        self.__upDown = udStream #up down stream distance 
         self.data = [] #raw data 
         self.plotData = [] #normalized data 
         self.__progress = 0 #track progress of data collecting
         self.__chrom=None 
-        self.__upDownStream=[]
+        self.__upDownStream=[] #up down stream data tuples
 
-    #!!!sort gff and sam lines into dict for each chrom  
     #sort input file variables by chromosome --- right now this is used to divide sam by chromosome
-    def sort(self,files='a'): # s -> sam, g -> gff/t default = both 
-    #  create dict ent for each chrom      chr1:[]
+    def sort(self,files='a'): 
+    #  create dict ent for each chrom     ie chr1:[]
         chroms ={}
         for line in self.__samLines: # go through file and add each line to respective chrom array 
             cols = line.split('\t')
@@ -86,6 +85,8 @@ class metaGenePlot:
                     chroms[chrom].append(line)
 
         self.__samLines = chroms 
+
+        ###################################################
     # append the arrays for each chrom to eachother in proper order 
         # sortedLines =[]
         # if 'chr1' not in chroms: #convert from roman 
@@ -107,10 +108,9 @@ class metaGenePlot:
 
         # for line in self.__samLines:
         #     print(line)
-       
+       ####################################################
 
-
-    def __parseData(self,sam,gff): 
+    def __parseData(self,sam,gff): #read files into arrays
 
         with open(sam, 'r') as samFile:
             samLines = samFile.readlines()
@@ -123,8 +123,7 @@ class metaGenePlot:
         return samLines, gffLines
     
 
-    def __getChromLength(self):
-        #length of second chrom > first in yeast :(
+    def __getChromLength(self): #find max length and sort gff lines by chrom 
         maxLength = 0
         firstChrom =None 
         chroms = {}
@@ -146,9 +145,9 @@ class metaGenePlot:
                 if firstChrom==None: 
                     firstChrom = cols[0] 
                     loc = i
-        print(maxLength)
                 
         self.__gffLines = chroms 
+
         #initialize nt positions
         self.__chrom = []
         for i in range(maxLength+self.__upDown): 
@@ -157,7 +156,6 @@ class metaGenePlot:
     
     def testSort(self): 
         self.sort()
-
         firstChrom, loc = self.__getChromLength()
         gffKeys= []
         samKeys = []
@@ -168,8 +166,11 @@ class metaGenePlot:
 
         print('gff chroms ',gffKeys)
         print('sam chroms ', samKeys)
+
+
+
         
-    def __populateChromosome(self,chrom):
+    def __populateChromosome(self,chrom): #populate current chrom with sam data 
         for line in self.__samLines[chrom]:
             cols = line.split('\t') 
             if len(cols)>=10:
@@ -180,47 +181,53 @@ class metaGenePlot:
                         self.__chrom[j]+= 1
                     except:
                         continue #print(j)
+        print('populated ',chrom)
+
 
     def __getGffArrays(self,chrom): 
         for line in self.__gffLines[chrom]:
             cols = line.split('\t') 
-            if len(cols)>1  and cols[2]== self.feature: #and (cols[6]=='+' ):#or cols[6] == '-'): # #if feature of interest 
+            if len(cols)>1  and cols[2]== self.feature: # #if feature of interest 
                 currArray=[]
                 dwnStream = []
                 upStream =[]
-                start, end =  int(cols[3])-1 , int(cols[4])-1 # get chromosome, start/end locations
+                start, end =  int(cols[3])-1 , int(cols[4])-1
                 down = start- self.__upDown
                 up = end + self.__upDown
-
+                if end-start >= 10: #some CDS in hg38 had length 0
                 #get feature values 
-                for i in range(start, end):
-                    currArray.append(self.__chrom[i])#pull the values from the chromDIct to build new array
+                    for i in range(start, end):
+                        currArray.append(self.__chrom[i])#pull the values from the chromDIct to build new array
 
-                #get down stream values 
-                for i in range(down, start):
-                    dwnStream.append(self.__chrom[i])
-                #get up stream values 
-                for i in range(end, up):
-                    try:
-                        upStream.append(self.__chrom[i])
-                    except: 
-                        upStream.append(0)
+                    #get down stream values 
+                    for i in range(down, start):
+                        dwnStream.append(self.__chrom[i])
+                    #get up stream values 
+                    for i in range(end, up):
+                        try:
+                            upStream.append(self.__chrom[i])
+                        except: 
+                            upStream.append(0)
 
-                if  cols[6]=='-':
-                    currArray = invertArray(currArray) #invert feature array
-                    temp= invertArray(dwnStream) #invert and flip up/down stream 
-                    dwnStream = invertArray(upStream)
-                    upStream = temp
+                    if  cols[6]=='-':
+                        currArray = invertArray(currArray) #invert feature array
+                        temp= invertArray(dwnStream) #invert and flip up/down stream 
+                        dwnStream = invertArray(upStream)
+                        upStream = temp
 
 
-                self.__upDownStream.append((dwnStream,upStream))
-                self.data.append(currArray)
-                self.names.append(cols[8])
+                    self.__upDownStream.append((dwnStream,upStream))
+                    self.data.append(currArray)
+                    self.names.append(cols[8])
+        print('gatherd ',chrom,' data')
+        
+
     def __resetChrom(self): 
         for i in range(len(self.__chrom)):
             self.__chrom[i]=0
 
-    def __buildData(self):
+
+    def __buildData(self): #gather metagene data for each chrom
         self.__getChromLength()
         self.sort()
         
@@ -229,9 +236,9 @@ class metaGenePlot:
                 self.__populateChromosome(chrom)
                 self.__getGffArrays(chrom) 
                 self.__resetChrom()
-
+     
         
-                
+     ##################################################################################           
     # def __populateChromosome(self,loc,currChrom): #get sam data for current chrom 
     #     i = loc
     #     firstLine =self.__samLines[loc]
@@ -481,7 +488,7 @@ class metaGenePlot:
             avg = 0 
             for array in self.data:
                 avg+= len(array)
-            avg= avg/(len(self.gffArrays))
+            avg= avg/(len(self.data))
             targetLength=avg
         
         graphArrays =[]
@@ -557,21 +564,12 @@ class metaGenePlot:
 
     def plot(self, numClusters:int,length:int, clusterUpDown:bool =False): #call to generate plot(s) after creating metaGenePlot object
 
-        # print("Setting chromosome arrays...")
-        # self.setArray()
-        # print(list((self.chromDict.keys())))
 
-        # print("Populating chromosomes...", end="")
-        # self.populateArray()
-
-        # print("\nIdentifying signals of interest...")
-        # self.getGffArray()
         self.__buildData()
 
         print("Normalizing feature length...")
         trendData=self.__normalizeArray(length)
-        #if self.upDown > 0 and clusterUpDown == True: # cluster upDpwn
-      
+     
         if numClusters==1: #for one cluster just average all data
             avgArray=averageArray(trendData)  
            
@@ -619,17 +617,6 @@ class metaGenePlot:
             genPlot(avgArray,name,self.__upDown)
             #enPlot(clusterCenters[i],name)
         wtExcell(clusterNames,self.gff)
-
-# def getFeatures(self): # call to check existing features and their proper syntax
-#             features = []
-#             with open(gff_File, "r") as gffFile:
-#                 for line in gffFile:
-#                     cols = line.split('\t')
-#                     if len(cols)>1 and cols[2] not in features:
-#                         features.append(cols[2])
-#             gffFile.close()
-#             print("\nThis feature is not found in "+gff_File+". Please refer to the list below for possible features.\n")
-#             print(features)                        
 
             
 

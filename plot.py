@@ -19,9 +19,6 @@ def genPlot(result,name,udStream):
         #y[i] = result[i]
     y= result
 
-    # ?? 
-    np.random.seed(5)
-
     # plot
     fig, ax = plt.subplots()
 

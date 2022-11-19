@@ -1,5 +1,5 @@
 import random
-#this is currently really slow for some reason 
+
 def calcMax(data):
     mxs=[]
     for i in range(len(data[0])):
@@ -84,8 +84,7 @@ def finalDistance(clusters, clusterCenters, data):
 
     return totDist       
 
-
-   
+#add return cluster centers and /0 error    
 def kCluster(numClusters, data): #
     clusters=[] #an array of feature indexes belonging to each cluster 
     clusterCenters=[] # a center for each position of each cluster
