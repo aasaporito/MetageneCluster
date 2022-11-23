@@ -3,6 +3,6 @@ from metaGene import metaGenePlot
 
 
 #example use 
-test = metaGenePlot('SRR20274751_HUMAN.sam','hg38.knownGene.gtf','CDS', 0)  # sam file, gff file, up/down stream length
-test.plot( 3,'avg')# num clusters, normalization length
+test = metaGenePlot('SRR20274751_HUMAN.sam','hg38.knownGene.gtf','transcript', 0)  # sam file, gff file, up/down stream length
+test.plot( 1,'avg')# num clusters, normalization length
 

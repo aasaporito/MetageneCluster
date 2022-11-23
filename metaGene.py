@@ -154,6 +154,7 @@ class metaGenePlot:
             self.__chrom.append(0)
        # print(len(self.__chrom))
     
+    
     def testSort(self): 
         self.sort()
         firstChrom, loc = self.__getChromLength()
@@ -196,7 +197,7 @@ class metaGenePlot:
                 up = end + self.__upDown
                 if end-start >= 10: #some CDS in hg38 had length 0
                 #get feature values 
-                    for i in range(start, end):
+                    for i in range(start, end-1):
                         currArray.append(self.__chrom[i])#pull the values from the chromDIct to build new array
 
                     #get down stream values 
@@ -489,7 +490,7 @@ class metaGenePlot:
             for array in self.data:
                 avg+= len(array)
             avg= avg/(len(self.data))
-            targetLength=avg
+            targetLength=round(avg) 
         
         graphArrays =[]
         for array in self.data:
