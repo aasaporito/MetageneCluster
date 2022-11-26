@@ -4,6 +4,8 @@ from kMeansClustering import autoKCluster, kCluster
 from plot import genPlot
 from writeExcel import wtExcell
 import roman
+from hCluster import hCluster
+from tree import cluster
 
 
 #invert feature array
@@ -563,35 +565,74 @@ class metaGenePlot:
 
     # #average normalized gff arrays (see top) 
 
-    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False): #call to generate plot(s) after creating metaGenePlot object
+
+    #divide into cluster and plot methods
+    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
 
 
         self.__buildData()
 
         print("Normalizing feature length...")
         trendData=self.__normalizeArray(length)
-     
-        if numClusters==1: #for one cluster just average all data
-            avgArray=averageArray(trendData)  
-           
-            print("Plotting data...")
-            name=self.gff[0:-4]+' '+self.feature
-            if self.__upDown> 0: #include existing up/down stream data
-                avgDown,avgUp = averageUpDown(self.__upDownStream)
-                print(len(avgDown), len(avgArray),len(avgUp))
-                fullArray = avgDown+avgArray+avgUp 
-            else:
-                fullArray = avgArray
-            genPlot(fullArray,name,self.__upDown)
-            return
-        elif(numClusters =='auto'):  #find the optimal number of cluster for the given data
-            print("Fitting data...") 
-            print('features:', len(trendData))
-            clusters = autoKCluster(trendData)
-        else: #divide data into fixed number clusters
-            print("Fitting data...")
-            clusters, distance = kCluster(numClusters, trendData)
-           
+
+        if clusterAlgo =='k':
+            if numClusters==1: #for one cluster just average all data
+                avgArray=averageArray(trendData)  
+            
+                print("Plotting data...")
+                name=self.gff[0:-4]+' '+self.feature
+                if self.__upDown> 0: #include existing up/down stream data
+                    avgDown,avgUp = averageUpDown(self.__upDownStream)
+                    print(len(avgDown), len(avgArray),len(avgUp))
+                    fullArray = avgDown+avgArray+avgUp 
+                else:
+                    fullArray = avgArray
+                genPlot(fullArray,name,self.__upDown)
+                return
+            elif(numClusters =='auto'):  #find the optimal number of cluster for the given data
+                print("Fitting data...") 
+                print('features:', len(trendData))
+                clusters = autoKCluster(trendData)
+            else: #divide data into fixed number clusters
+                print("Fitting data...")
+                clusters, distance = kCluster(numClusters, trendData)
+            
+            # clusterNames=[]
+            # for i,cluster in enumerate(clusters):
+            #     clusterData = []
+            #     featureNames=[]
+            #     name=self.gff[0:-4]+' '+self.feature+' cluster '+str(i)
+            #     for feature in cluster: 
+            #         featureNames.append(self.names[feature])
+            #         if self.__upDown> 0 and clusterUpDown==False:
+            #             featureData = self.__upDownStream[feature][0]+trendData[feature]+self.__upDownStream[feature][1]
+            #             clusterData.append(featureData)      
+            #         else:
+            #             clusterData.append(trendData[feature])
+
+            #     clusterNames.append(featureNames)
+                
+            #     avgArray=averageArray(clusterData)
+            # # avgDown,avgUp = averageUpDown(self.upDownStream)
+            #     # if self.upDown> 0 and clusterUpDown==False:
+            #     #     print(len(avgDown), len(avgArray),len(avgUp))
+            #     #     fullArray = avgDown+avgArray+avgUp 
+            #     # else:
+            #     #     fullArray = avgArray
+            #     print("Plotting data...",len(cluster))
+            #     genPlot(avgArray,name,self.__upDown)
+            #     #enPlot(clusterCenters[i],name)
+            # wtExcell(clusterNames,self.gff)
+        elif clusterAlgo=='h':
+            print('hCluster')
+            nodes = hCluster(numClusters,trendData)
+            clusters =[]
+            for node  in nodes:
+                data = node.getIdxs()
+                clusters.append(data)
+                
+
+            
         clusterNames=[]
         for i,cluster in enumerate(clusters):
             clusterData = []
@@ -608,7 +649,7 @@ class metaGenePlot:
             clusterNames.append(featureNames)
             
             avgArray=averageArray(clusterData)
-           # avgDown,avgUp = averageUpDown(self.upDownStream)
+        # avgDown,avgUp = averageUpDown(self.upDownStream)
             # if self.upDown> 0 and clusterUpDown==False:
             #     print(len(avgDown), len(avgArray),len(avgUp))
             #     fullArray = avgDown+avgArray+avgUp 
@@ -618,8 +659,5 @@ class metaGenePlot:
             genPlot(avgArray,name,self.__upDown)
             #enPlot(clusterCenters[i],name)
         wtExcell(clusterNames,self.gff)
-
-            
-
 
 
