@@ -118,6 +118,7 @@ def divideClusters(numClusters,root):
 
 def hCluster(numClusters,data):
     #create node for each feature
+   
     clusters= []
     for i in range(len(data)):
         leaf = cluster()
@@ -126,16 +127,16 @@ def hCluster(numClusters,data):
         
     
     distMatrix = calcMatrix(data)
-    nn= len(distMatrix[376])
     n = len(distMatrix)
     while n>1:
+        print(n)
         nextPair,dist = findNextPair(distMatrix) #find next cluster 
 
         #combine clusters
         combineClusters(nextPair,dist,clusters)
 
         distMatrix = reduceMatrix(nextPair,distMatrix)
-
+        
         n-=1 
     
     #root should be first cluster
