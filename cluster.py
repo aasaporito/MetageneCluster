@@ -7,8 +7,8 @@ class cluster:
         self._centers =[]
         self._idxs=[]
         self._data=[]
-        self._plus=[]
-        self._minus=[]
+        self._plus=0
+        self._minus=0
 
     #gettrs 
     def getCenters(self):
@@ -20,6 +20,12 @@ class cluster:
     def strandRatio(self):
         return self._plus/(self._plus/self._minus) 
     
-    def _randCenters(self):
+    def incStrand(self,strand):
+        if strand =='+':
+            self._plus+=1
+        elif strand =='-':
+            self._minus+=1 
+
+   # def _randCenters(self): 
     
-    def 
+    

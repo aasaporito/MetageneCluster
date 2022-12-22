@@ -34,8 +34,9 @@ def genPlot(result,name,udStream,numFeatures):
     ax.set_ylabel('Reads')
 
     plt.figure(figsize=(15, 10))
-    plt.plot(x[udStream-1:(len(x)-udStream-1)],y[udStream-1:(len(x)-udStream-1)])
-    plt.plot(x[(len(x)-udStream-1):udStream-1],y[(len(x)-udStream-1):udStream-1],linestyle='-.')
+    plt.plot(x[(len(x)-udStream-1):len(x)-1],y[(len(x)-udStream-1):len(x)-1],linestyle='-.',color='red')
+    plt.plot(x[0:udStream-1],y[0:udStream-1],linestyle='-.',color='red')
+    plt.plot(x[udStream-1:(len(x)-udStream-1)],y[udStream-1:(len(x)-udStream-1)],color ='black')
     plt.title(name+' ('+str(numFeatures)+')')
     plt.xlabel('Distance')
     plt.ylabel('Reads')
