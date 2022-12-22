@@ -4,3 +4,5 @@
 *.sam
 *.xls
 *.png
+*.txt
+.gitignore
