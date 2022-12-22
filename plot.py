@@ -39,6 +39,6 @@ def genPlot(result,name,udStream,numFeatures):
     plt.title(name+' ('+str(numFeatures)+')')
     plt.xlabel('Distance')
     plt.ylabel('Reads')
-    plt.locator_params(axis='y', nbins=xyScale)
-    plt.locator_params(axis='x',nbins=xyScale)
+    # plt.locator_params(axis='y', nbins=xyScale)
+    # plt.locator_params(axis='x',nbins=xyScale)
     plt.savefig(name+".png" , dpi = 75)

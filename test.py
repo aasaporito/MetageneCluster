@@ -9,4 +9,4 @@ from hCluster import reduceMatrix,shiftArray
 
 
 test2 = metaGenePlot('RPKM_alignments.sam','saccharomyces_cerevisiae.gff','intron',100)
-test2.plot(3,'avg',distCalc=1)
+test2.plot(3,400,distCalc=1)
