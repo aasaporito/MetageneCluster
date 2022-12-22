@@ -3,6 +3,8 @@ from kMeansClustering import kCluster
 from plot import genPlot
 from metaGene import averageArray
 
+###test clustering algos on simulated data
+
 #read sim data
 simData = []
 firstHalf =[]
@@ -19,6 +21,8 @@ with open('simData2.txt','r') as df:
 
 df.close()
 
+
+### pre-cluster visulaization ###
 # fullData = averageArray(simData)
 # genPlot(fullData,'simNoCluster2',0)
 
@@ -31,24 +35,32 @@ df.close()
 # fullData =[first,second]
 # full = averageArray(fullData)
 # genPlot(full,'simNoCluster2',0)
+#-------------------------------------#
 
-# nodes = hCluster(2,simData)
+### HClustering ####
+nodes = hCluster(3,simData)
 
-# clusters =[]
-# for node  in nodes:
-#     data = node.getIdxs()
-#     clusters.append(data)
+clusters =[]
+for node  in nodes:
+    data = node.getIdxs()
+    clusters.append(data)
+#----------------------#
 
-clusters,x = kCluster(2,simData)
+###kmeans clustering###
+#clusters,x = kCluster(2,simData)
+#-------------------------------------#
+
+
+#extract cluster data 
 for i,cluster in enumerate(clusters):
             clusterData = []
             for feature in cluster: 
                 clusterData.append(simData[feature])
 
     
-            
+            #plot cluster
             avgArray=averageArray(clusterData)
-            name= 'simData2 kCluster '+str(i)
+            name= 'simData2.2 hCluster '+str(i) + ' ('+str(len(cluster))+')'
             print("Plotting data...",len(cluster))
             genPlot(avgArray,name,0)
             

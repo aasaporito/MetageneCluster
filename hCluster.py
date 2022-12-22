@@ -11,7 +11,7 @@ def calcDistance(data1,data2):
     
     return distance
         
-# build distance matrix from data 
+# build distance matrix from data
 def calcMatrix(data): 
     n = len(data)
     distMatrix =[[] for i in range(len(data))]
@@ -43,12 +43,8 @@ def reduceMatrix(pair,distMatrix): #pair => int for each cluster index
             col = i -1 
         else: 
             col = i
-        for j in range(len(distMatrix)):
-            if j>= pair[1]:
-                row = j - 1
-            else:
-                row = j
 
+        for j in range(len(distMatrix)):
             if i == pair[1] or j == pair[1]:
                 continue
             elif i == j:
@@ -90,35 +86,41 @@ def combineClusters(pair,dist,clusters):
     
     shiftArray(clusters,pair[1])
 
-def divideClusters(numClusters,root):
+def divideClusters(numClusters,root): #add depth
     clusters = []
-    
+    #very likely only works for up to three clusters
     if numClusters == 2:
         clusters.append(root.getLeft())
         clusters.append(root.getRight())
-        #return clusters
     elif numClusters== 1:
         clusters.append(root)
-        #return [root]
-    # else: 
-    #     if root.getLeft().isLeaf():
-    #         clusters.append(root.getLeft())
-    #         subClusters = divideClusters(numClusters-len(clusters),root.getRight())
-    #     elif root.getRight().isLeaf():
-    #         clusters.append(root.getRight())
-    #         subClusters = divideClusters(numClusters-len(clusters),root.getLeft())
-    #     elif root.getLeft().getDistance()>root.getRight().getDistance():
-
+    else: 
+        if root.getLeft().isLeaf():
+            clusters.append(root.getLeft())
+            subClusters = divideClusters(numClusters-len(clusters),root.getRight())
+            clusters+=subClusters
+        elif root.getRight().isLeaf():
+            clusters.append(root.getRight())
+            subClusters = divideClusters(numClusters-len(clusters),root.getLeft())
+            clusters+=subClusters
+        elif root.getLeft().getDistance()>root.getRight().getDistance():
+            clusters.append(root.getRight())
+            subClusters = divideClusters(numClusters-len(clusters),root.getLeft())
+            clusters+=subClusters
+        else:
+            clusters.append(root.getLeft())
+            subClusters = divideClusters(numClusters-len(clusters),root.getRight())
+            clusters+=subClusters
             
     return clusters
 
 
 
 
-
+#cluster all data into one tree, then split to form clusters 
 def hCluster(numClusters,data):
+    
     #create node for each feature
-   
     clusters= []
     for i in range(len(data)):
         leaf = cluster()
@@ -129,18 +131,21 @@ def hCluster(numClusters,data):
     distMatrix = calcMatrix(data)
     n = len(distMatrix)
     while n>1:
-        print(n)
+       
         nextPair,dist = findNextPair(distMatrix) #find next cluster 
 
         #combine clusters
         combineClusters(nextPair,dist,clusters)
 
+        #shrink matrix to accomadate clustered pair
         distMatrix = reduceMatrix(nextPair,distMatrix)
         
         n-=1 
     
-    #root should be first cluster
+    #root at first cluster
     root = clusters[0]
+    
+    #split tree into clusters 
     clusters= divideClusters(numClusters,clusters[0])
     return clusters
-    #print(len(root.getIdxs()))
+   

@@ -2,7 +2,7 @@
 import math
 from kMeansClustering import autoKCluster, kCluster 
 from plot import genPlot
-from writeExcel import wtExcell
+from writeNames import writeNames
 import roman
 from hCluster import hCluster
 from tree import cluster
@@ -71,6 +71,7 @@ class metaGenePlot:
         self.__progress = 0 #track progress of data collecting
         self.__chrom=None 
         self.__upDownStream=[] #up down stream data tuples
+        self.trash = [] #names of features thrown out
 
     #sort input file variables by chromosome --- right now this is used to divide sam by chromosome
     def sort(self,files='a'): 
@@ -199,29 +200,35 @@ class metaGenePlot:
                 up = end + self.__upDown
                 if end-start >= 10: #some CDS in hg38 had length 0
                 #get feature values 
+                    zeros = 0
                     for i in range(start, end-1):
                         currArray.append(self.__chrom[i])#pull the values from the chromDIct to build new array
+                        zeros+=self.__chrom[i]
+                    #throw out features that are all zeros
+                    if zeros>0:
+                        #get down stream values 
+                        for i in range(down, start):
+                            dwnStream.append(self.__chrom[i])
+                        #get up stream values 
+                        for i in range(end, up):
+                            try:
+                                upStream.append(self.__chrom[i])
+                            except: 
+                                upStream.append(0)
 
-                    #get down stream values 
-                    for i in range(down, start):
-                        dwnStream.append(self.__chrom[i])
-                    #get up stream values 
-                    for i in range(end, up):
-                        try:
-                            upStream.append(self.__chrom[i])
-                        except: 
-                            upStream.append(0)
+                        if  cols[6]=='-':
+                            currArray = invertArray(currArray) #invert feature array
+                            temp= invertArray(dwnStream) #invert and flip up/down stream 
+                            dwnStream = invertArray(upStream)
+                            upStream = temp
 
-                    if  cols[6]=='-':
-                        currArray = invertArray(currArray) #invert feature array
-                        temp= invertArray(dwnStream) #invert and flip up/down stream 
-                        dwnStream = invertArray(upStream)
-                        upStream = temp
+                        self.__upDownStream.append((dwnStream,upStream))
+                        self.data.append(currArray)
+                        self.names.append(cols[8])
 
+                    else:#zero, skip 
+                        self.trash.append(cols[8])
 
-                    self.__upDownStream.append((dwnStream,upStream))
-                    self.data.append(currArray)
-                    self.names.append(cols[8])
         print('gatherd ',chrom,' data')
         
 
@@ -567,7 +574,7 @@ class metaGenePlot:
 
 
     #divide into cluster and plot methods
-    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
+    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , distCalc = 0, clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
 
 
         self.__buildData()
@@ -587,15 +594,15 @@ class metaGenePlot:
                     fullArray = avgDown+avgArray+avgUp 
                 else:
                     fullArray = avgArray
-                genPlot(fullArray,name,self.__upDown)
+                genPlot(fullArray,name,self.__upDown,len(trendData))
                 return
             elif(numClusters =='auto'):  #find the optimal number of cluster for the given data
                 print("Fitting data...") 
                 print('features:', len(trendData))
-                clusters = autoKCluster(trendData)
+                clusters = autoKCluster(trendData,distCalc)
             else: #divide data into fixed number clusters
                 print("Fitting data...")
-                clusters, distance = kCluster(numClusters, trendData)
+                clusters, distance = kCluster(numClusters, trendData,distCalc)
             
             # clusterNames=[]
             # for i,cluster in enumerate(clusters):
@@ -623,7 +630,8 @@ class metaGenePlot:
             #     genPlot(avgArray,name,self.__upDown)
             #     #enPlot(clusterCenters[i],name)
             # wtExcell(clusterNames,self.gff)
-        elif clusterAlgo=='h':
+
+        elif clusterAlgo=='h': #use hCluster on metagene data 
             print('hCluster')
             nodes = hCluster(numClusters,trendData)
             clusters =[]
@@ -633,7 +641,7 @@ class metaGenePlot:
                 
 
             
-        clusterNames=[]
+        # clusterNames=[]
         for i,cluster in enumerate(clusters):
             clusterData = []
             featureNames=[]
@@ -646,7 +654,7 @@ class metaGenePlot:
                 else:
                     clusterData.append(trendData[feature])
 
-            clusterNames.append(featureNames)
+            # clusterNames.append(featureNames)
             
             avgArray=averageArray(clusterData)
         # avgDown,avgUp = averageUpDown(self.upDownStream)
@@ -656,8 +664,9 @@ class metaGenePlot:
             # else:
             #     fullArray = avgArray
             print("Plotting data...",len(cluster))
-            genPlot(avgArray,name,self.__upDown)
+            genPlot(avgArray,name,self.__upDown,len(cluster))
+            writeNames(featureNames,self.gff+'_'+self.feature+'_'+str(i))
             #enPlot(clusterCenters[i],name)
-        wtExcell(clusterNames,self.gff)
+        #wtExcell(clusterNames,self.gff)
 
 

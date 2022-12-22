@@ -1,12 +1,13 @@
 import random
+### script to create simulated data 
 
 data =[]
 
 #sqrt(x)
 for j in range(50):
     curr=[]
-    m = 2*random.random() + .2 
-    b = random.randint(1,3)* random.random()+.1
+    m = random.randint(1,3)
+    b = random.randint(1,2)
 
     for i in range(10):
         y = m*(i**.5)+b
@@ -17,8 +18,8 @@ for j in range(50):
 #sqrt(-x+10)
 for j in range(50):
     curr=[]
-    m = 2*random.random() + .2 
-    b = random.randint(1,3) * random.random()+.1
+    m = random.randint(1,3)
+    b = random.randint(1,2)
     for i in range(10):
         
         y = m*(-i+10)**.5+b
@@ -26,7 +27,9 @@ for j in range(50):
     data.append(curr)
 
 
-with open('simData2.txt','w') as file:
+
+
+with open('simData3.txt','w') as file:
     for feature in data:
         line = str(feature)
         file.write(line)

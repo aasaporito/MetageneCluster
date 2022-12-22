@@ -27,6 +27,26 @@ def calcNearestCluster(feature,clusterCenters ): # calc the distance of the curr
             nearest = i 
     return nearest #index of cluster the feature is closest to 
 
+def normalizeShape(feature): #normalize feature by shape 
+    #find average height
+    avg=0 
+    for val in feature:
+        avg+=val
+    avg = avg/len(feature)
+    #divide each position by average
+    normalFeature = []
+    for val in feature:
+        normalFeature.append(val/avg)
+    return normalFeature
+
+def calcNCShape( feature, clusterCenters): # calcs nearest cluster based on shape rather than distance
+    normalFeature = normalizeShape(feature)
+    normalCenters=[]
+    for center in clusterCenters:
+        normalCenters.append(normalizeShape(center))
+
+    return calcNearestCluster(normalFeature,normalCenters)
+
 
 def calcCenters(cluster,data): # calc the new centers for a cluster
     centers=[]
@@ -85,7 +105,10 @@ def finalDistance(clusters, clusterCenters, data):
     return totDist       
 
 #add return cluster centers and /0 error    
-def kCluster(numClusters, data): #
+def kCluster(numClusters, data, distCalc): #
+    if distCalc>1:
+        print('Undefined distance measure. Use 0 for height or 1 for shape.')
+        return
     clusters=[] #an array of feature indexes belonging to each cluster 
     clusterCenters=[] # a center for each position of each cluster
     prev=[] #tracks the previous location of each feature 
@@ -129,7 +152,11 @@ def kCluster(numClusters, data): #
 
         #assign new cluster for each feature
         for i,feature in enumerate(data):
-            cluster = calcNearestCluster(feature, clusterCenters) #cluster index
+            if distCalc == 0:
+                cluster = calcNearestCluster(feature, clusterCenters) #cluster index
+            elif distCalc == 1:
+                cluster = calcNCShape(feature,clusterCenters)
+        
             clusters[cluster].append(i)  #populate clusters
             if First== True: 
                 prev[i]=cluster
@@ -148,7 +175,8 @@ def kCluster(numClusters, data): #
         
         #calc final distance
         totDistance = finalDistance(clusters,clusterCenters, data )
-      
+        # print(clusters)
+        # print(totDistance)
     return clusters , totDistance
     
 
@@ -171,7 +199,7 @@ def oneCluster(graphArrays):
     return avgArray, totDistance
 
 
-def autoKCluster(data): 
+def autoKCluster(data,distCalc): 
     #get total distance from each cluster, stop when change in total distance from last cluser < 25%
     totDistancePerIteration=[]
     x,totDistance1 = oneCluster(data) #baseline
@@ -179,7 +207,7 @@ def autoKCluster(data):
     diff = totDistance1 
     numClusters = 2 
     while diff>(.2*(totDistancePerIteration[numClusters-2])):
-        clusters, totDistance = kCluster(numClusters, data)
+        clusters, totDistance = kCluster(numClusters, data,distCalc)
         totDistancePerIteration.append(totDistance)
         diff= abs(totDistancePerIteration[numClusters-1]-totDistancePerIteration[numClusters-2])
         print(diff)
