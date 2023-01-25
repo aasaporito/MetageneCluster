@@ -4,16 +4,7 @@ import numpy as np
 
 
 ##add up/down stream markers and num features label 
-def genPlot(result,name,udStream,numFeatures):
-    # if udStream == 0: 
-    #     markers = [] 
-    # else:
-    #     start = udStream
-    #     end = udStream+ len(result)
-    #     markers = [start,end]
-    # x = [0] * len(result)
-    #y = [0] * len(result)
-    
+def genPlot(result,name,udStream,numFeatures):    
     # for i in range(0, len(result)):
     #     x[i] = i
     #     #y[i] = result[i]

@@ -1,5 +1,6 @@
+from dataclasses import dataclass
 
-
+@dataclass
 class cluster: 
     def __init__(self,data):
         #initialize random centers 
