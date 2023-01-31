@@ -330,7 +330,7 @@ class metaGenePlot:
 
 
     #divide into cluster and plot methods
-    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , distCalc = 0, clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
+    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , d = 0, clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
 
 
         self.__buildData()
@@ -355,10 +355,10 @@ class metaGenePlot:
             elif(numClusters =='auto'):  #find the optimal number of cluster for the given data
                 print("Fitting data...") 
                 print('features:', len(trendData))
-                clusters = autoKCluster(trendData,distCalc)
+                clusters = autoKCluster(trendData,d)
             else: #divide data into fixed number clusters
                 print("Fitting data...")
-                clusters, distance = kCluster(numClusters, trendData,distCalc)
+                clusters, distance = kCluster(numClusters, trendData,d)
             
            
 
