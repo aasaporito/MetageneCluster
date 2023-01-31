@@ -66,7 +66,8 @@ def isStable(memory):#return bool
     numMovers=memory[-1]
     print('movers:',numMovers)
     
-    if  numMovers == 0 or (len(memory)>2 and (abs(memory[-2] - memory[-1] )<= .1*memory[-2]) and memory[-1]<.25*max(memory) and memory[-1]<=memory[-2]): #another condition based on max movers? 
+    if  numMovers == 0 or (len(memory)>2 and (abs(memory[-2] - memory[-1] )<= .1*memory[-2]) 
+                           and memory[-1]<.25*max(memory) and memory[-1]<=memory[-2]): 
         return True 
 
     return False

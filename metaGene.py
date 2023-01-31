@@ -72,6 +72,7 @@ class metaGenePlot:
         self.__chrom=None 
         self.__upDownStream=[] #up down stream data tuples
         self.trash = [] #names of features thrown out
+        self.__strand=[]
 
     #sort input file variables by chromosome --- right now this is used to divide sam by chromosome
     def sort(self,files='a'): 
@@ -114,11 +115,12 @@ class metaGenePlot:
        ####################################################
 
     def __parseData(self,sam,gff): #read files into arrays
-
+        print('Reading SAM file...')
         with open(sam, 'r') as samFile:
             samLines = samFile.readlines()
         samFile.close()
 
+        print('Reading GFF file...')
         with open(gff) as gffFile: 
             gffLines = gffFile.readlines()
         gffFile.close()
@@ -221,6 +223,9 @@ class metaGenePlot:
                             temp= invertArray(dwnStream) #invert and flip up/down stream 
                             dwnStream = invertArray(upStream)
                             upStream = temp
+                        
+
+                        self.__strand.append(cols[6])
 
                         self.__upDownStream.append((dwnStream,upStream))
                         self.data.append(currArray)
@@ -229,7 +234,7 @@ class metaGenePlot:
                     else:#zero, skip 
                         self.trash.append(cols[8])
 
-        print('gatherd ',chrom,' data')
+        print('Gatherd ',chrom,' data')
         
 
     def __resetChrom(self): 
@@ -376,9 +381,11 @@ class metaGenePlot:
         for i,cluster in enumerate(clusters):
             clusterData = []
             featureNames=[]
+            clusterStrands=[]
             name=self.gff[0:-4]+' '+self.feature+' cluster '+str(i)
             for feature in cluster: 
                 featureNames.append(self.names[feature])
+                clusterStrands.append(self.__strand[feature])
                 if self.__upDown> 0 and clusterUpDown==False:
                     featureData = self.__upDownStream[feature][0]+trendData[feature]+self.__upDownStream[feature][1]
                     clusterData.append(featureData)      
@@ -396,7 +403,9 @@ class metaGenePlot:
             #     fullArray = avgArray
             print("Plotting data...",len(cluster))
             genPlot(avgArray,name,self.__upDown,len(cluster))
-            writeNames(featureNames,self.gff+'_'+self.feature+'_'+str(i))
+            writeNames(featureNames,self.gff[0:-4]+'_'+self.feature+'_'+str(i))
+
+            writeNames(clusterStrands,'STRAND'+'_'+self.gff[0:-4]+'_'+self.feature+'_'+str(i))
             #enPlot(clusterCenters[i],name)
         #wtExcell(clusterNames,self.gff)
 
