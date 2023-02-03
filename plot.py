@@ -4,7 +4,7 @@ import numpy as np
 
 
 ##add up/down stream markers and num features label 
-def genPlot(result,name,udStream,numFeatures):    
+def genPlot(result,name,udStream,numFeatures,location):    
     # for i in range(0, len(result)):
     #     x[i] = i
     #     #y[i] = result[i]
@@ -33,4 +33,4 @@ def genPlot(result,name,udStream,numFeatures):
     plt.ylabel('Reads')
     # plt.locator_params(axis='y', nbins=xyScale)
     # plt.locator_params(axis='x',nbins=xyScale)
-    plt.savefig(name+".png" , dpi = 75)
+    plt.savefig('Outputs/'+name+".png" , dpi = 75)

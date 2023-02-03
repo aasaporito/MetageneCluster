@@ -4,13 +4,14 @@ from hCluster import reduceMatrix,shiftArray
 
 
 #example use 
-#test = metaGenePlot('SRR20274751_HUMAN.sam','+hg38.knownGene.gtf','transcript', 0)  # sam file, gff file, up/down stream length
-# test.plot( 1,'avg')# num clusters, normalizat
+test = metaGenePlot('SRR20274751_HUMAN.sam','hg38.knownGene.gtf','CDS', 20)  # sam file, gff file, up/down stream length
+test.plot( 3,'avg',d=1)
+# # num clusters, normalizat
 # +ion length
 
 
-test2 = metaGenePlot('RPKM_alignments.sam','saccharomyces_cerevisiae.gff','gene',50)
-test2.plot(2,250,d=1)
+# test2 = metaGenePlot('RPKM_alignments.sam','saccharomyces_cerevisiae.gff','gene',50)
+# test2.plot(2,250,d=1)
 
 # with open('RPKM_alignments.sam', 'r') as samFile:
 #     for i,line in enumerate(samFile): 

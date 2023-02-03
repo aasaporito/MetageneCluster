@@ -2,7 +2,7 @@
 import math
 from kMeansClustering import autoKCluster, kCluster 
 from plot import genPlot
-from writeNames import writeNames
+from writeOutput import writeNames
 import roman
 from hCluster import hCluster
 from tree import cluster
@@ -73,6 +73,7 @@ class metaGenePlot:
         self.__upDownStream=[] #up down stream data tuples
         self.trash = [] #names of features thrown out
         self.__strand=[]
+        self.__oPath='./Outputs'
 
     #sort input file variables by chromosome --- right now this is used to divide sam by chromosome
     def sort(self,files='a'): 
