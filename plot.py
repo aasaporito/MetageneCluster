@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import os 
 
 
 ##add up/down stream markers and num features label 
-def genPlot(result,name,udStream,numFeatures,location):    
+def genPlot(result,fname,dirName,udStream,numFeatures):    
     # for i in range(0, len(result)):
     #     x[i] = i
     #     #y[i] = result[i]
@@ -28,9 +28,14 @@ def genPlot(result,name,udStream,numFeatures,location):
     plt.plot(x[(len(x)-udStream-1):len(x)-1],y[(len(x)-udStream-1):len(x)-1],linestyle='-.',color='red')
     plt.plot(x[0:udStream-1],y[0:udStream-1],linestyle='-.',color='red')
     plt.plot(x[udStream-1:(len(x)-udStream-1)],y[udStream-1:(len(x)-udStream-1)],color ='black')
-    plt.title(name+' ('+str(numFeatures)+')')
+    plt.title(fname+' ('+str(numFeatures)+')')
     plt.xlabel('Distance')
     plt.ylabel('Reads')
     # plt.locator_params(axis='y', nbins=xyScale)
-    # plt.locator_params(axis='x',nbins=xyScale)
-    plt.savefig('Outputs/'+name+".png" , dpi = 75)
+    # plt.locator_params(axis='x',nbins=xyScale) 
+    
+    path=fname+".png" #in case of single plot
+    if dirName != None:
+        path = 'Outputs/'+dirName+'/'+path
+
+    plt.savefig(path , dpi = 75)

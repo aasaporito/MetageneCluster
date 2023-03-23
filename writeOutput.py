@@ -1,13 +1,13 @@
 from plot import genPlot
-from pathlib import Path
+import os
 
 
 
 
 #create txt list of features for a cluster
-def writeNames(names, fileName,location):
+def writeNames(names, fileName, dirName):
 
-    with open(fileName , 'w') as record: 
+    with open('Outputs/'+dirName+'/'+fileName , 'w') as record: 
         #write header
 
         #write names
@@ -16,6 +16,16 @@ def writeNames(names, fileName,location):
             record.write(line)
     record.close()  
 
-def makeDir(name): 
-    #Path("./Outputs").mkdir(parents=True, exist_ok=True) 
-    Path("./Outputs/"+name).mkdir(parents=True, exist_ok=True)
+def makeDir(name):
+    newName = name
+    path = 'Outputs/'+newName
+    while os.path.exists(path):#path exists, create new sub file name
+       num = int(newName[-1]) + 1 
+       newName = name[:-1]+str(num)
+       path = 'Outputs/'+newName
+    
+    os.makedirs(path) 
+    return newName
+             
+
+    

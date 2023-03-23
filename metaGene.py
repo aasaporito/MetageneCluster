@@ -2,7 +2,7 @@
 import math
 from kMeansClustering import autoKCluster, kCluster 
 from plot import genPlot
-from writeOutput import writeNames
+from writeOutput import writeNames,makeDir
 import roman
 from hCluster import hCluster
 from tree import cluster
@@ -73,7 +73,7 @@ class metaGenePlot:
         self.__upDownStream=[] #up down stream data tuples
         self.trash = [] #names of features thrown out
         self.__strand=[]
-        self.__oPath='./Outputs'
+       
 
     #sort input file variables by chromosome --- right now this is used to divide sam by chromosome
     def sort(self,files='a'): 
@@ -334,11 +334,10 @@ class metaGenePlot:
 
     # #average normalized gff arrays (see top) 
 
-
-    #divide into cluster and plot methods
+    
     def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , d = 0, clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
 
-
+        
         self.__buildData()
 
         print("Normalizing feature length...")
@@ -356,7 +355,7 @@ class metaGenePlot:
                     fullArray = avgDown+avgArray+avgUp 
                 else:
                     fullArray = avgArray
-                genPlot(fullArray,name,self.__upDown,len(trendData))
+                genPlot(fullArray,name,None,self.__upDown,len(trendData))
                 return
             elif(numClusters =='auto'):  #find the optimal number of cluster for the given data
                 print("Fitting data...") 
@@ -365,7 +364,7 @@ class metaGenePlot:
             else: #divide data into fixed number clusters
                 print("Fitting data...")
                 clusters, distance = kCluster(numClusters, trendData,d)
-            
+                print('Clustering complete')
            
 
         elif clusterAlgo=='h': #use hCluster on metagene data 
@@ -377,7 +376,7 @@ class metaGenePlot:
                 clusters.append(data)
                 
 
-            
+        pathName = makeDir(self.gff[0:-4]+'1')
         # clusterNames=[]
         for i,cluster in enumerate(clusters):
             clusterData = []
@@ -403,10 +402,10 @@ class metaGenePlot:
             # else:
             #     fullArray = avgArray
             print("Plotting data...",len(cluster))
-            genPlot(avgArray,name,self.__upDown,len(cluster))
-            writeNames(featureNames,self.gff[0:-4]+'_'+self.feature+'_'+str(i))
+            genPlot(avgArray,name,pathName,self.__upDown,len(cluster))
+            writeNames(featureNames,self.gff[0:-4]+'_'+self.feature+'_'+str(i),pathName)
 
-            writeNames(clusterStrands,'STRAND'+'_'+self.gff[0:-4]+'_'+self.feature+'_'+str(i))
+            #writeNames(clusterStrands,'STRAND'+'_'+self.gff[0:-4]+'_'+self.feature+'_'+str(i))
             #enPlot(clusterCenters[i],name)
         #wtExcell(clusterNames,self.gff)
 
