@@ -4,7 +4,6 @@
 *.sam
 *.xls
 *.png
-*.gitignore
 *.txt
 *.pyc
-
+Outputs/
