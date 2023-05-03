@@ -4,8 +4,8 @@ from kMeansClustering import autoKCluster, kCluster
 from plot import genPlot
 from writeOutput import writeNames,makeDir
 import roman
-from hCluster import hCluster
-from tree import cluster
+from Extras.hCluster import hCluster
+from Extras.tree import cluster
 
 
 #invert feature array

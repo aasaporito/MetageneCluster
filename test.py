@@ -1,5 +1,5 @@
 from metaGene import metaGenePlot
-from hCluster import reduceMatrix,shiftArray
+from Extras.hCluster import reduceMatrix,shiftArray
 # add single para, if single = true - provide input for left or right end (if exists)
 
 
