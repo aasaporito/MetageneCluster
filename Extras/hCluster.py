@@ -1,4 +1,4 @@
-from tree import cluster
+from Extras.tree import cluster
 
 #cal distance between two data points 
 def calcDistance(data1,data2):

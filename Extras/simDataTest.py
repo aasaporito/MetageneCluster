@@ -1,4 +1,4 @@
-from hCluster import hCluster
+from Extras.hCluster import hCluster
 from kMeansClustering import kCluster
 from plot import genPlot
 from metaGene import averageArray
