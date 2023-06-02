@@ -1,4 +1,5 @@
-
+"""Summary
+"""
 import math
 from kMeansClustering import autoKCluster, kCluster 
 from plot import genPlot
@@ -10,6 +11,14 @@ from Extras.tree import cluster
 
 #invert feature array
 def invertArray(feature): 
+    """Summary
+    
+    Args:
+        feature (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     temp = 0 
     inverted = feature 
     for i in range(math.ceil(len(inverted)/2)):
@@ -20,6 +29,14 @@ def invertArray(feature):
 
 #average feature arrays at each index
 def averageArray(graphArrays):
+    """Summary
+    
+    Args:
+        graphArrays (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     avgArray = []
     numArray =  len(graphArrays)
     # for array in graphArrays:       ###!!!
@@ -37,6 +54,14 @@ def averageArray(graphArrays):
 
 #average up/down arrays
 def averageUpDown(upDownStream):
+    """Summary
+    
+    Args:
+        upDownStream (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     upArray = []
     downArray =[]
     for i in range(len(upDownStream[0][0])):
@@ -57,7 +82,29 @@ def averageUpDown(upDownStream):
 #a class to create metagene plots based on SAM and GFF/GFT
 #requires compatible chromosome labels 
 class metaGenePlot:
+
+    """Summary
+    
+    Attributes:
+        data (list): Description
+        feature (TYPE): Description
+        gff (TYPE): Description
+        names (list): Description
+        plotData (list): Description
+        sam (TYPE): Description
+        trash (list): Description
+    """
+    
     def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sorted=True):
+        """Summary
+        
+        Args:
+            sam_file (str): Description
+            gff_file (str): Description
+            featureType (str): Description
+            udStream (int, optional): Description
+            sorted (bool, optional): Description
+        """
         self.__samLines, self.__gffLines=self.__parseData(sam_file,gff_file) #set file variables
         self.__samLength = len(self.__samLines)#for tracking progress 
         self.__gffLength = len(self.__gffLines)
@@ -77,6 +124,11 @@ class metaGenePlot:
 
     #sort input file variables by chromosome --- right now this is used to divide sam by chromosome
     def sort(self,files='a'): 
+        """Summary
+        
+        Args:
+            files (str, optional): Description
+        """
     #  create dict ent for each chrom     ie chr1:[]
         chroms ={}
         for line in self.__samLines: # go through file and add each line to respective chrom array 
@@ -116,6 +168,15 @@ class metaGenePlot:
        ####################################################
 
     def __parseData(self,sam,gff): #read files into arrays
+        """Summary
+        
+        Args:
+            sam (TYPE): Description
+            gff (TYPE): Description
+        
+        Returns:
+            TYPE: Description
+        """
         print('Reading SAM file...')
         with open(sam, 'r') as samFile:
             samLines = samFile.readlines()
@@ -130,6 +191,8 @@ class metaGenePlot:
     
 
     def __getChromLength(self): #find max length and sort gff lines by chrom 
+        """Summary
+        """
         maxLength = 0
         firstChrom =None 
         chroms = {}
@@ -162,6 +225,8 @@ class metaGenePlot:
     
     
     def testSort(self): 
+        """Summary
+        """
         self.sort()
         firstChrom, loc = self.__getChromLength()
         gffKeys= []
@@ -178,6 +243,11 @@ class metaGenePlot:
 
         
     def __populateChromosome(self,chrom): #populate current chrom with sam data 
+        """Summary
+        
+        Args:
+            chrom (TYPE): Description
+        """
         for line in self.__samLines[chrom]:
             cols = line.split('\t') 
             if len(cols)>=10:
@@ -192,6 +262,11 @@ class metaGenePlot:
 
 
     def __getGffArrays(self,chrom): 
+        """Summary
+        
+        Args:
+            chrom (TYPE): Description
+        """
         for line in self.__gffLines[chrom]:
             cols = line.split('\t') 
             if len(cols)>1  and cols[2]== self.feature: # #if feature of interest 
@@ -239,11 +314,15 @@ class metaGenePlot:
         
 
     def __resetChrom(self): 
+        """Summary
+        """
         for i in range(len(self.__chrom)):
             self.__chrom[i]=0
 
 
     def __buildData(self): #gather metagene data for each chrom
+        """Summary
+        """
         self.__getChromLength()
         self.sort()
         
@@ -256,6 +335,14 @@ class metaGenePlot:
         
   
     def __normalizeArray(self, targetLength):
+        """Summary
+        
+        Args:
+            targetLength (TYPE): Description
+        
+        Returns:
+            TYPE: Description
+        """
         if targetLength== 'avg':  #find average array length
             avg = 0 
             for array in self.data:
@@ -336,8 +423,18 @@ class metaGenePlot:
 
     
     def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , d = 0, clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
-
+        """Summary
         
+        Args:
+            numClusters (int): Description
+            length (int): Description
+            clusterUpDown (bool, optional): Description
+            d (int, optional): Description
+            clusterAlgo (str, optional): Description
+        
+        Returns:
+            TYPE: Description
+        """
         self.__buildData()
 
         print("Normalizing feature length...")

@@ -1,6 +1,16 @@
+"""Summary
+"""
 import random
 
 def calcMax(data):
+    """Summary
+    
+    Args:
+        data (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     mxs=[]
     for i in range(len(data[0])):
         max = 0 
@@ -11,6 +21,15 @@ def calcMax(data):
     return mxs
 
 def calcNearestCluster(feature,clusterCenters ): # calc the distance of the current feature to each cluster 
+    """Summary
+    
+    Args:
+        feature (TYPE): Description
+        clusterCenters (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     distances=[]
     for cluster in clusterCenters:
         distance=0 
@@ -28,6 +47,14 @@ def calcNearestCluster(feature,clusterCenters ): # calc the distance of the curr
     return nearest #index of cluster the feature is closest to 
 
 def normalizeShape(feature): #normalize feature by shape 
+    """Summary
+    
+    Args:
+        feature (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     #find average height
     avg=0 
     for val in feature:
@@ -40,6 +67,15 @@ def normalizeShape(feature): #normalize feature by shape
     return normalFeature
 
 def calcNCShape( feature, clusterCenters): # calcs nearest cluster based on shape rather than distance
+    """Summary
+    
+    Args:
+        feature (TYPE): Description
+        clusterCenters (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     normalFeature = normalizeShape(feature)
     normalCenters=[]
     for center in clusterCenters:
@@ -49,6 +85,15 @@ def calcNCShape( feature, clusterCenters): # calcs nearest cluster based on shap
 
 
 def calcCenters(cluster,data): # calc the new centers for a cluster
+    """Summary
+    
+    Args:
+        cluster (TYPE): Description
+        data (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     centers=[]
     for i in range(len(data[0])):
         center=0
@@ -62,6 +107,14 @@ def calcCenters(cluster,data): # calc the new centers for a cluster
     return centers
 
 def isStable(memory):#return bool
+    """Summary
+    
+    Args:
+        memory (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     # look at general number of movers --> identify convergence of num movers
     numMovers=memory[-1]
     print('movers:',numMovers)
@@ -74,6 +127,15 @@ def isStable(memory):#return bool
     return False
 
 def init(numClusters,data):
+    """Summary
+    
+    Args:
+        numClusters (TYPE): Description
+        data (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     clusters=[] #an array of feature indexes belong to each cluster 
     clusterCenters=[] # a center for each position of each cluster
     prev=[] #tracks the previous location of each feature 
@@ -94,6 +156,16 @@ def init(numClusters,data):
 
 #calculate final distances from each feature to their current cluster to assess the accuracy of the clustering
 def finalDistance(clusters, clusterCenters, data): 
+    """Summary
+    
+    Args:
+        clusters (TYPE): Description
+        clusterCenters (TYPE): Description
+        data (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     totDist=0
     for i,cluster in enumerate(clusters):
         clusterDist=0
@@ -108,6 +180,16 @@ def finalDistance(clusters, clusterCenters, data):
 
 #add return cluster centers and /0 error    
 def kCluster(numClusters, data, distCalc): #
+    """Summary
+    
+    Args:
+        numClusters (TYPE): Description
+        data (TYPE): Description
+        distCalc (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     if distCalc>1:
         print('Undefined distance measure. Use 0 for height or 1 for shape.')
         return
@@ -184,6 +266,14 @@ def kCluster(numClusters, data, distCalc): #
 
 #set baseline distance for autoCluster
 def oneCluster(graphArrays): 
+    """Summary
+    
+    Args:
+        graphArrays (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     avgArray = []
     for i in range(len(graphArrays[0])):
         avgArray.append(0)
@@ -202,6 +292,15 @@ def oneCluster(graphArrays):
 
 
 def autoKCluster(data,distCalc): 
+    """Summary
+    
+    Args:
+        data (TYPE): Description
+        distCalc (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     #get total distance from each cluster, stop when change in total distance from last cluser < 25%
     totDistancePerIteration=[]
     x,totDistance1 = oneCluster(data) #baseline

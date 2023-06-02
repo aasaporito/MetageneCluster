@@ -1,3 +1,5 @@
+"""Summary
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 import os 
@@ -5,6 +7,15 @@ import os
 
 ##add up/down stream markers and num features label 
 def genPlot(result,fname,dirName,udStream,numFeatures):    
+    """Summary
+    
+    Args:
+        result (TYPE): Description
+        fname (TYPE): Description
+        dirName (TYPE): Description
+        udStream (TYPE): Description
+        numFeatures (TYPE): Description
+    """
     # for i in range(0, len(result)):
     #     x[i] = i
     #     #y[i] = result[i]

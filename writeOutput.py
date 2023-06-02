@@ -1,3 +1,5 @@
+"""Summary
+"""
 from plot import genPlot
 import os
 
@@ -6,7 +8,13 @@ import os
 
 #create txt list of features for a cluster
 def writeNames(names, fileName, dirName):
-
+    """Summary
+    
+    Args:
+        names (TYPE): Description
+        fileName (TYPE): Description
+        dirName (TYPE): Description
+    """
     with open('Outputs/'+dirName+'/'+fileName , 'w') as record: 
         #write header
 
@@ -17,6 +25,14 @@ def writeNames(names, fileName, dirName):
     record.close()  
 
 def makeDir(name):
+    """Summary
+    
+    Args:
+        name (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     newName = name
     path = 'Outputs/'+newName
     while os.path.exists(path):#path exists, create new sub file name
