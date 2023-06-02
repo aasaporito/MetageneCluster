@@ -1,3 +1,12 @@
+"""Summary
+
+Attributes:
+    clusters (list): Description
+    firstHalf (list): Description
+    nodes (TYPE): Description
+    secondHalf (list): Description
+    simData (list): Description
+"""
 from Extras.hCluster import hCluster
 from kMeansClustering import kCluster
 from plot import genPlot

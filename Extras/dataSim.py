@@ -1,3 +1,8 @@
+"""Summary
+
+Attributes:
+    data (list): Description
+"""
 import random
 ### script to create simulated data 
 
