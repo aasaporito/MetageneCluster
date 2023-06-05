@@ -21,12 +21,12 @@ def writeNames(names, fileName, dirName):
 
 def makeDir(name):
     """Summary
-
+        Creates a directory within Outputs/
     Args:
-        name (TYPE): Description
+        name (str): The name for the new directory. Must end in an integer.
 
     Returns:
-        TYPE: Description
+        str: Returns the new path name 
     """
     newName = name
     path = 'Outputs/' + newName
