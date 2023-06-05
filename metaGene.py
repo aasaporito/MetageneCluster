@@ -128,7 +128,8 @@ class metaGenePlot:
         Deleted Parameters:
             files (str, optional): Removed: Used to specify the file to split.
         """
-    #  create dict ent for each chrom     ie chr1:[]
+
+        #create dict ent for each chrom     ie chr1:[]
         chroms ={}
         for line in self.__samLines: # go through file and add each line to respective chrom array 
             cols = line.split('\t')
@@ -142,6 +143,7 @@ class metaGenePlot:
 
         self.__samLines = chroms 
 
+        #  todo 2 (general) +0: Figure this mess out
         ###################################################
     # append the arrays for each chrom to eachother in proper order 
         # sortedLines =[]
@@ -166,15 +168,15 @@ class metaGenePlot:
         #     print(line)
        ####################################################
 
-    def __parseData(self,sam,gff): #read files into arrays
+    def __parseData(self, sam, gff):
         """Summary
-        
+            Reads and stores .sam and .gff files.
         Args:
-            sam (TYPE): Description
-            gff (TYPE): Description
+            sam (string): .sam file name
+            gff (string): .gff file name
         
         Returns:
-            TYPE: Description
+            (str, str): A tuple storing the raw data from .sam and .gff files
         """
         print('Reading SAM file...')
         with open(sam, 'r') as samFile:
