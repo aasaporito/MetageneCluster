@@ -12,7 +12,7 @@ from Extras.tree import cluster
 def invertArray(feature): 
     """Summary
         Inverts an array of features.
-        
+
     Args:
         feature (list): A list of features to invert
     
@@ -48,15 +48,15 @@ def averageArray(graphArrays):
         avgArray.append(indxTot/numArray)
     return avgArray
 
-#average up/down arrays
 def averageUpDown(upDownStream):
     """Summary
-    
+        Averages up and down stream lists.
+
     Args:
-        upDownStream (TYPE): Description
+        upDownStream (list[list]): A 2d list represnting the up and downstream.
     
     Returns:
-        TYPE: Description
+        (list, list): A tuple storing the averaged downStream list and the averaged upStream list.
     """
     upArray = []
     downArray =[]
@@ -73,7 +73,7 @@ def averageUpDown(upDownStream):
         upArray[j]=upArray[j]/numArray
         downArray[j] = downArray[j]/numArray
 
-    return downArray , upArray
+    return downArray, upArray
 
 class metaGenePlot:
 
