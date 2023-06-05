@@ -343,7 +343,7 @@ class metaGenePlot:
                 self.__resetChrom()
      
         
-  
+    #  todo 3 (general) +0: Figure this function out
     def __normalizeArray(self, targetLength):
         """Summary
         
@@ -432,18 +432,20 @@ class metaGenePlot:
     # #average normalized gff arrays (see top) 
 
     
-    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , d = 0, clusterAlgo='k'): #call to generate plot(s) after creating metaGenePlot object
+    def plot(self, numClusters:int,length:int, clusterUpDown:bool =False , d = 0, clusterAlgo='k'): 
         """Summary
-        
+            Create and saves the plot of a metaGenePlot and saves the data to disk.
+            The output is written to Output/(GFF seqname, source, feature)/
+
         Args:
-            numClusters (int): Description
-            length (int): Description
-            clusterUpDown (bool, optional): Description
-            d (int, optional): Description
-            clusterAlgo (str, optional): Description
+            numClusters (int): Size of clusters. 'auto' allows for optimal clustering.
+            length (int): The feature length to normalize to
+            clusterUpDown (bool, optional): When false, upDownStream features are written. Default: False
+            d (int, optional): Distance measure between 0 and 1 for clustering. Deault: 0
+            clusterAlgo (str, optional): Cluster algorithim to utilize. Values may be 'k' or 'h'. Default: k
         
         Returns:
-            TYPE: Description
+            None: 
         """
         self.__buildData()
 
@@ -462,6 +464,7 @@ class metaGenePlot:
                     fullArray = avgDown+avgArray+avgUp 
                 else:
                     fullArray = avgArray
+
                 genPlot(fullArray,name,None,self.__upDown,len(trendData))
                 return
             elif(numClusters =='auto'):  #find the optimal number of cluster for the given data
@@ -484,7 +487,7 @@ class metaGenePlot:
                 
 
         pathName = makeDir(self.gff[0:-4]+'1')
-        # clusterNames=[]
+
         for i,cluster in enumerate(clusters):
             clusterData = []
             featureNames=[]
@@ -498,22 +501,9 @@ class metaGenePlot:
                     clusterData.append(featureData)      
                 else:
                     clusterData.append(trendData[feature])
-
-            # clusterNames.append(featureNames)
             
             avgArray=averageArray(clusterData)
-        # avgDown,avgUp = averageUpDown(self.upDownStream)
-            # if self.upDown> 0 and clusterUpDown==False:
-            #     print(len(avgDown), len(avgArray),len(avgUp))
-            #     fullArray = avgDown+avgArray+avgUp 
-            # else:
-            #     fullArray = avgArray
+
             print("Plotting data...",len(cluster))
             genPlot(avgArray,name,pathName,self.__upDown,len(cluster))
             writeNames(featureNames,self.gff[0:-4]+'_'+self.feature+'_'+str(i),pathName)
-
-            #writeNames(clusterStrands,'STRAND'+'_'+self.gff[0:-4]+'_'+self.feature+'_'+str(i))
-            #enPlot(clusterCenters[i],name)
-        #wtExcell(clusterNames,self.gff)
-
-
