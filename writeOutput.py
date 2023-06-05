@@ -3,19 +3,16 @@
 import os
 
 
-# create txt list of features for a cluster
 def writeNames(names, fileName, dirName):
     """Summary
+        Creates a text list of features for a given cluster
 
     Args:
-        names (TYPE): Description
-        fileName (TYPE): Description
-        dirName (TYPE): Description
+        names (list): A list of features
+        fileName (str): Name for the file
+        dirName (str): Name for the output folder within Outputs/
     """
     with open('Outputs/' + dirName + '/' + fileName, 'w') as record:
-        # write header
-
-        # write names
         for name in names:
             line = str(name)
             record.write(line)
