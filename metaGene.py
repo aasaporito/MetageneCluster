@@ -9,15 +9,14 @@ from Extras.hCluster import hCluster
 from Extras.tree import cluster
 
 
-#invert feature array
 def invertArray(feature): 
     """Summary
-    
+        Inverts an array of features.
     Args:
-        feature (TYPE): Description
+        feature (list): Description
     
     Returns:
-        TYPE: Description
+        list: Description
     """
     temp = 0 
     inverted = feature 
