@@ -97,6 +97,7 @@ class metaGenePlot:
     def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sorted=True):
         """Summary
             Constructor for metaGenePlot class.
+
         Args:
             sam_file (str): Name of the .sam file to use
             gff_file (str): Name of the .gff file to use
@@ -171,6 +172,7 @@ class metaGenePlot:
     def __parseData(self, sam, gff):
         """Summary
             Reads and stores .sam and .gff files.
+
         Args:
             sam (string): .sam file name
             gff (string): .gff file name
@@ -244,11 +246,10 @@ class metaGenePlot:
         print('sam chroms ', samKeys)
 
 
-
-        
     def __populateChromosome(self,chrom):
         """Summary
             Populates a given chromosome with .sam data
+
         Args:
             chrom (int): The index of the chomosome within the .sam file
         """
@@ -268,13 +269,14 @@ class metaGenePlot:
 
     def __getGffArrays(self,chrom): 
         """Summary
-        
+            Processes data from gff input. Sets the following class properties: __strand, __upDownStream, data, names, trash.
+
         Args:
-            chrom (TYPE): Description
+            chrom (int): The index of the chromosome within the .gff file
         """
         for line in self.__gffLines[chrom]:
             cols = line.split('\t') 
-            if len(cols)>1  and cols[2]== self.feature: # #if feature of interest 
+            if len(cols)>1  and cols[2]== self.feature: # if feature of interest 
                 currArray=[]
                 dwnStream = []
                 upStream =[]
@@ -282,11 +284,12 @@ class metaGenePlot:
                 down = start- self.__upDown
                 up = end + self.__upDown
                 if end-start >= 10: #some CDS in hg38 had length 0
-                #get feature values 
+                    #get feature values 
                     zeros = 0
                     for i in range(start, end-1):
-                        currArray.append(self.__chrom[i])#pull the values from the chromDIct to build new array
+                        currArray.append(self.__chrom[i]) #pull the values from the chromDIct to build new array
                         zeros+=self.__chrom[i]
+
                     #throw out features that are all zeros
                     if zeros>0:
                         #get down stream values 
@@ -299,7 +302,7 @@ class metaGenePlot:
                             except: 
                                 upStream.append(0)
 
-                        if  cols[6]=='-':
+                        if cols[6]=='-':
                             currArray = invertArray(currArray) #invert feature array
                             temp= invertArray(dwnStream) #invert and flip up/down stream 
                             dwnStream = invertArray(upStream)
@@ -312,7 +315,7 @@ class metaGenePlot:
                         self.data.append(currArray)
                         self.names.append(cols[8])
 
-                    else:#zero, skip 
+                    else: #zero, skip 
                         self.trash.append(cols[8])
 
         print('Gatherd ',chrom,' data')
