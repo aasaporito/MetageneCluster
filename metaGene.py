@@ -178,6 +178,7 @@ class metaGenePlot:
         Returns:
             (str, str): A tuple storing the raw data from .sam and .gff files
         """
+
         print('Reading SAM file...')
         with open(sam, 'r') as samFile:
             samLines = samFile.readlines()
@@ -195,6 +196,7 @@ class metaGenePlot:
         """Summary
             Finds the max length and sorts .gff entries by chromosome.
         """
+
         maxLength = 0
         firstChrom =None 
         chroms = {}
@@ -228,6 +230,7 @@ class metaGenePlot:
         """Summary
             A test function to check on the output of sort()
         """
+
         self.sort()
         firstChrom, loc = self.__getChromLength()
         gffKeys= []
@@ -243,22 +246,23 @@ class metaGenePlot:
 
 
         
-    def __populateChromosome(self,chrom): #populate current chrom with sam data 
+    def __populateChromosome(self,chrom):
         """Summary
-        
+            Populates a given chromosome with .sam data
         Args:
-            chrom (TYPE): Description
+            chrom (int): The index of the chomosome within the .sam file
         """
         for line in self.__samLines[chrom]:
             cols = line.split('\t') 
             if len(cols)>=10:
-                start,seqLength= int(cols[3]),len(cols[9]) # postion and sequence length
-                end = start + seqLength -1
+                start, seqLength = int(cols[3]), len(cols[9]) # postion and sequence length
+                end = start + seqLength - 1
                 for j in range(start-1, end):
                     try: 
-                        self.__chrom[j]+= 1
+                        self.__chrom[j] += 1
                     except:
-                        continue #print(j)
+                        continue 
+
         print('populated ',chrom)
 
 
