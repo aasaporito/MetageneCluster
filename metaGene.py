@@ -13,10 +13,10 @@ def invertArray(feature):
     """Summary
         Inverts an array of features.
     Args:
-        feature (list): Description
+        feature (list): A list of features to invert
     
     Returns:
-        list: Description
+        list: Returns the inveted list
     """
     temp = 0 
     inverted = feature 
@@ -26,10 +26,10 @@ def invertArray(feature):
         inverted[-(i+1)] =  temp
     return inverted
 
-#average feature arrays at each index
+
 def averageArray(graphArrays):
     """Summary
-    
+        Averages feature arrays at each index.
     Args:
         graphArrays (TYPE): Description
     
@@ -38,11 +38,6 @@ def averageArray(graphArrays):
     """
     avgArray = []
     numArray =  len(graphArrays)
-    # for array in graphArrays:       ###!!!
-    #     for i in range(len(array)): 
-    #         avgArray[i]+= array[i]
-    # for j in range(len(avgArray)):
-    #     avgArray[j]=avgArray[j]/numArray
 
     for i in range(len(graphArrays[0])):
         indxTot=0
