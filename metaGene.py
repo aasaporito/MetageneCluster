@@ -1,10 +1,11 @@
 """Summary
+    Contains the core MetaGenePlot class. This class processes, stores, and plots metagene data from .sam and .gff files.
+    Contains list helper functions.
 """
 import math
 from kMeansClustering import autoKCluster, kCluster 
 from plot import genPlot
 from writeOutput import writeNames,makeDir
-import roman
 from Extras.hCluster import hCluster
 from Extras.tree import cluster
 
@@ -139,31 +140,6 @@ class metaGenePlot:
                     chroms[chrom].append(line)
 
         self.__samLines = chroms 
-
-        #  todo 2 (general) +0: Figure this mess out
-        ###################################################
-    # append the arrays for each chrom to eachother in proper order 
-        # sortedLines =[]
-        # if 'chr1' not in chroms: #convert from roman 
-        #     gffChroms ={}
-    
-        #     for key in chroms:
-        #         num = key[3:]
-        #         try:
-        #             val = roman.fromRoman(num)
-        #             intChroms[val] = chroms[key]
-                    
-        #         except:
-        #             strChroms[key] = chroms[key]
-        #     for key in sorted(intChroms):
-        #         sortedLines+= intChroms[key]
-        #     for key in sorted(strChroms):
-        #         sortedLines+=strChroms[key]
-        # self.__samLines=sortedLines #sorted
-
-        # for line in self.__samLines:
-        #     print(line)
-       ####################################################
 
     def __parseData(self, sam, gff):
         """Summary
