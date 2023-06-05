@@ -329,8 +329,9 @@ class metaGenePlot:
             self.__chrom[i]=0
 
 
-    def __buildData(self): #gather metagene data for each chrom
+    def __buildData(self): 
         """Summary
+            Gathers and sets metagene data for each chromosome.
         """
         self.__getChromLength()
         self.sort()
