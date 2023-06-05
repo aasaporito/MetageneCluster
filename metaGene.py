@@ -104,29 +104,29 @@ class metaGenePlot:
             udStream (int, optional): The distance between up and down stream for chromosomes in .gff. Default = 0.
             sorted (bool, optional): Deprecated, does nothing.
         """
-        self.__samLines, self.__gffLines=self.__parseData(sam_file,gff_file) #set file variables
+        self.__samLines, self.__gffLines = self.__parseData(sam_file,gff_file) #set file variables
         self.__samLength = len(self.__samLines) 
         self.__gffLength = len(self.__gffLines)
         self.gff = gff_file 
         self.sam = sam_file
-        self.feature= featureType 
-        self.names=[] 
+        self.feature = featureType 
+        self.names = [] 
         self.__upDown = udStream 
         self.data = [] 
         self.plotData = [] 
         self.__progress = 0 
-        self.__chrom=None 
-        self.__upDownStream=[] #up down stream data tuples
+        self.__chrom = None 
+        self.__upDownStream =[] #up down stream data tuples
         self.trash = [] 
-        self.__strand=[]
+        self.__strand = []
        
 
-    #sort input file variables by chromosome --- right now this is used to divide sam by chromosome
-    def sort(self,files='a'): 
+    def sort(self): 
         """Summary
+            Divides sam file by chromosome. Results are stored in self.__samLines
         
-        Args:
-            files (str, optional): Description
+        Deleted Parameters:
+            files (str, optional): Removed: Used to specify the file to split.
         """
     #  create dict ent for each chrom     ie chr1:[]
         chroms ={}
@@ -137,7 +137,7 @@ class metaGenePlot:
                 if chrom in chroms:
                     chroms[chrom].append(line)
                 else:
-                    chroms[chrom]= []
+                    chroms[chrom] = []
                     chroms[chrom].append(line)
 
         self.__samLines = chroms 
