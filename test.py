@@ -1,14 +1,12 @@
 """Summary
-
-Attributes:
-    test2 (TYPE): Description
+    Tester file to run the program
 """
 from metaGene import metaGenePlot
 from Extras.hCluster import reduceMatrix,shiftArray
 # add single para, if single = true - provide input for left or right end (if exists)
 
 
-#example use 
+##example use 
 # test = metaGenePlot('SRR20274751_HUMAN.sam','hg38.knownGene.gtf','CDS', 50)  # sam file, gff file, up/down stream length
 # test.plot( 1,500,d=1)
 # # num clusters, normalizat
