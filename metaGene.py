@@ -79,46 +79,45 @@ def averageUpDown(upDownStream):
 
     return downArray , upArray
 
-#a class to create metagene plots based on SAM and GFF/GFT
-#requires compatible chromosome labels 
 class metaGenePlot:
 
     """Summary
-    
+        A class to create and store metagene plots given a SAM and GFF/GFT file. Chomosome labels must be compatible.
+
     Attributes:
-        data (list): Description
-        feature (TYPE): Description
-        gff (TYPE): Description
-        names (list): Description
-        plotData (list): Description
-        sam (TYPE): Description
-        trash (list): Description
+        data (list): Stores raw GFF data
+        feature (str): Stores the given feature type. i.e. 'gene' or 'CDS'
+        gff (str): The .GFF file name
+        names (list): Frames indicating the base of the codon from .GFF column 8.
+        plotData (list): Normalized data
+        sam (str): .SAM file name
+        trash (list): Stores removed features (features that are all 0's.)
     """
     
     def __init__(self,sam_file:str, gff_file:str, featureType:str, udStream:int = 0,sorted=True):
         """Summary
-        
+            Constructor for metaGenePlot class.
         Args:
-            sam_file (str): Description
-            gff_file (str): Description
-            featureType (str): Description
-            udStream (int, optional): Description
-            sorted (bool, optional): Description
+            sam_file (str): Name of the .sam file to use
+            gff_file (str): Name of the .gff file to use
+            featureType (str): Feature type i.e. gene, CDS
+            udStream (int, optional): The distance between up and down stream for chromosomes in .gff. Default = 0.
+            sorted (bool, optional): Deprecated, does nothing.
         """
         self.__samLines, self.__gffLines=self.__parseData(sam_file,gff_file) #set file variables
-        self.__samLength = len(self.__samLines)#for tracking progress 
+        self.__samLength = len(self.__samLines) 
         self.__gffLength = len(self.__gffLines)
-        self.gff = gff_file #file names
+        self.gff = gff_file 
         self.sam = sam_file
         self.feature= featureType 
-        self.names=[] #names of instances of given feature 
-        self.__upDown = udStream #up down stream distance 
-        self.data = [] #raw data 
-        self.plotData = [] #normalized data 
-        self.__progress = 0 #track progress of data collecting
+        self.names=[] 
+        self.__upDown = udStream 
+        self.data = [] 
+        self.plotData = [] 
+        self.__progress = 0 
         self.__chrom=None 
         self.__upDownStream=[] #up down stream data tuples
-        self.trash = [] #names of features thrown out
+        self.trash = [] 
         self.__strand=[]
        
 
