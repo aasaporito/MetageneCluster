@@ -323,6 +323,7 @@ class metaGenePlot:
 
     def __resetChrom(self): 
         """Summary
+            Erases all stored chromosome memory.
         """
         for i in range(len(self.__chrom)):
             self.__chrom[i]=0
