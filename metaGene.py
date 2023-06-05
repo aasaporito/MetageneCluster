@@ -12,6 +12,7 @@ from Extras.tree import cluster
 def invertArray(feature): 
     """Summary
         Inverts an array of features.
+        
     Args:
         feature (list): A list of features to invert
     
@@ -30,11 +31,12 @@ def invertArray(feature):
 def averageArray(graphArrays):
     """Summary
         Averages feature arrays at each index.
+
     Args:
-        graphArrays (TYPE): Description
+        graphArrays (list): List to average.
     
     Returns:
-        TYPE: Description
+        list: Averaged list
     """
     avgArray = []
     numArray =  len(graphArrays)
