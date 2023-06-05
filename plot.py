@@ -1,24 +1,20 @@
 """Summary
+    Provides the genPlot function to create and save feature plots.
 """
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-# add up/down stream markers and num features label
 def genPlot(result, fname, dirName, udStream, numFeatures):
     """Summary
-
+        Creates a plot of features using numpy and matplotlib.
     Args:
-        result (TYPE): Description
-        fname (TYPE): Description
-        dirName (TYPE): Description
-        udStream (TYPE): Description
-        numFeatures (TYPE): Description
+        result (list): The result to plot
+        fname (str): File name to be used as the plot title
+        dirName (str): Directory to output to within Outputs/
+        udStream (int): Distance between chromosomes.
+        numFeatures (int): The number of features (utilized in the plot title)
     """
-    # for i in range(0, len(result)):
-    #     x[i] = i
-    #     #y[i] = result[i]
-    # y= result
     y = np.array(result)
     x = np.arange(len(y))
 
@@ -40,8 +36,6 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
     plt.title(fname + ' (' + str(numFeatures) + ')')
     plt.xlabel('Distance')
     plt.ylabel('Reads')
-    # plt.locator_params(axis='y', nbins=xyScale)
-    # plt.locator_params(axis='x',nbins=xyScale)
 
     path = fname + ".png"  # in case of single plot
     if dirName != None:
