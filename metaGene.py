@@ -226,6 +226,7 @@ class metaGenePlot:
     
     def testSort(self): 
         """Summary
+            A test function to check on the output of sort()
         """
         self.sort()
         firstChrom, loc = self.__getChromLength()
