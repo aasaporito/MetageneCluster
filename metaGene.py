@@ -191,8 +191,9 @@ class metaGenePlot:
         return samLines, gffLines
     
 
-    def __getChromLength(self): #find max length and sort gff lines by chrom 
+    def __getChromLength(self):
         """Summary
+            Finds the max length and sorts .gff entries by chromosome.
         """
         maxLength = 0
         firstChrom =None 
@@ -208,13 +209,12 @@ class metaGenePlot:
                     chroms[chrom]= []
                     chroms[chrom].append(line)
 
-            if (len(cols)>1) and int(cols[4]) > maxLength: #and  (cols[6]=='+' ):#or cols[6] == '-') : # and cols[6]=='+' #skip the rows at the bottom 
+            if (len(cols)>1) and int(cols[4]) > maxLength: 
                
-                #farthest poi in chromosome
+                #farthest point in chromosome
                 maxLength=int(cols[4])
                 if firstChrom==None: 
                     firstChrom = cols[0] 
-                    loc = i
                 
         self.__gffLines = chroms 
 
@@ -222,7 +222,6 @@ class metaGenePlot:
         self.__chrom = []
         for i in range(maxLength+self.__upDown): 
             self.__chrom.append(0)
-       # print(len(self.__chrom))
     
     
     def testSort(self): 
