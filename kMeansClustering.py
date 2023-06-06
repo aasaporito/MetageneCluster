@@ -1,16 +1,18 @@
 """Summary
+    File with functions to create and process clustering using the kMeans algorithm.
+
 """
 import random
 
 
 def calcMax(data):
     """Summary
-
+        Calculates the maximum from a collection of features
     Args:
-        data (TYPE): Description
+        data (list): 2d data list
 
     Returns:
-        TYPE: Description
+        list: List of maximums
     """
     mxs = []
     for i in range(len(data[0])):
@@ -22,16 +24,16 @@ def calcMax(data):
     return mxs
 
 
-# calc the distance of the current feature to each cluster
 def calcNearestCluster(feature, clusterCenters):
     """Summary
+        Calculate the distance of the current feature to each cluster
 
     Args:
-        feature (TYPE): Description
-        clusterCenters (TYPE): Description
+        feature (list): Feature list
+        clusterCenters (list): List of cluster centers
 
     Returns:
-        TYPE: Description
+        int: Index of the cluster the feature is closest to
     """
     distances = []
     for cluster in clusterCenters:
@@ -47,17 +49,18 @@ def calcNearestCluster(feature, clusterCenters):
         if distance <= min:
             min = distance
             nearest = i
-    return nearest  # index of cluster the feature is closest to
+    return nearest  
 
 
-def normalizeShape(feature):  # normalize feature by shape
+def normalizeShape(feature): 
     """Summary
+        Normalize a feature by shape
 
     Args:
-        feature (TYPE): Description
+        feature (list): Feature list
 
     Returns:
-        TYPE: Description
+        list: Normalized feature list
     """
     # find average height
     avg = 0
@@ -71,16 +74,16 @@ def normalizeShape(feature):  # normalize feature by shape
     return normalFeature
 
 
-# calcs nearest cluster based on shape rather than distance
 def calcNCShape(feature, clusterCenters):
     """Summary
+        Calculates the nearest cluster based on shape
 
     Args:
-        feature (TYPE): Description
-        clusterCenters (TYPE): Description
+        feature (list): Feature list
+        clusterCenters (list): List of cluster centers
 
     Returns:
-        TYPE: Description
+        int: Index of the nearest cluster
     """
     normalFeature = normalizeShape(feature)
     normalCenters = []
@@ -90,15 +93,16 @@ def calcNCShape(feature, clusterCenters):
     return calcNearestCluster(normalFeature, normalCenters)
 
 
-def calcCenters(cluster, data):  # calc the new centers for a cluster
+def calcCenters(cluster, data): 
     """Summary
+        Calulates the centers for a cluster
 
     Args:
-        cluster (TYPE): Description
-        data (TYPE): Description
+        cluster (list): Cluster to find the center of
+        data (list): 2D Data list
 
     Returns:
-        TYPE: Description
+        list: List of centers for each feature in a cluster
     """
     centers = []
     for i in range(len(data[0])):
@@ -115,12 +119,13 @@ def calcCenters(cluster, data):  # calc the new centers for a cluster
 
 def isStable(memory):  # return bool
     """Summary
+        Internal function to test stability of memory
 
     Args:
-        memory (TYPE): Description
+        memory (list): 
 
     Returns:
-        TYPE: Description
+        bool: Returns true if the memory is stable
     """
     # look at general number of movers --> identify convergence of num movers
     numMovers = memory[-1]
@@ -136,13 +141,14 @@ def isStable(memory):  # return bool
 
 def init(numClusters, data):
     """Summary
+        Initializer 
 
     Args:
-        numClusters (TYPE): Description
-        data (TYPE): Description
+        numClusters (int): Number of clusters
+        data (list): 2d list storing data
 
     Returns:
-        TYPE: Description
+        (list, list, list): Tuple storing: List of clusters, list of cluster centers, list of previous feature locatoins
     """
     clusters = []  # an array of feature indexes belong to each cluster
     clusterCenters = []  # a center for each position of each cluster
@@ -163,19 +169,19 @@ def init(numClusters, data):
         clusterCenters.append(centers)
     return clusters, clusterCenters, prev
 
+
 # calculate final distances from each feature to their current cluster to assess the accuracy of the clustering
-
-
 def finalDistance(clusters, clusterCenters, data):
     """Summary
+        Calculates final distances between features and their current clusters
 
     Args:
-        clusters (TYPE): Description
-        clusterCenters (TYPE): Description
-        data (TYPE): Description
+        clusters (list): List of clusters
+        clusterCenters (list): List of cluster centers
+        data (list): 2D data list
 
     Returns:
-        TYPE: Description
+        int: Total distance between clusters and cluster centers
     """
     totDist = 0
     for i, cluster in enumerate(clusters):
@@ -194,14 +200,15 @@ def finalDistance(clusters, clusterCenters, data):
 
 def kCluster(numClusters, data, distCalc):
     """Summary
-
+        Generates kClusters
     Args:
-        numClusters (TYPE): Description
-        data (TYPE): Description
-        distCalc (TYPE): Description
+        numClusters (int): Number of clusters
+        data (list): 2D data list
+        distCalc (int): Distance calculated using calculation methods
 
     Returns:
-        TYPE: Description
+        (list, int): Returns The list of clusters and total distance between 
+                    features and their clusters
     """
     if distCalc > 1:
         print('Undefined distance measure. Use 0 for height or 1 for shape.')
@@ -232,7 +239,6 @@ def kCluster(numClusters, data, distCalc):
 
     # check prev
     #prev = clusters
-    restart = False
     # clusters, clusterCenters,prev =init(numClusters,data)
     #print('numcluster ',len(clusters) , len(clusterCenters))
     stop = False
@@ -244,8 +250,6 @@ def kCluster(numClusters, data, distCalc):
         # reset clusters
         for i in range(numClusters):  # [[],[],[],...]
             clusters[i] = []
-
-        assnmnts = []
 
         # assign new cluster for each feature
         for i, feature in enumerate(data):
@@ -273,20 +277,17 @@ def kCluster(numClusters, data, distCalc):
 
         # calc final distance
         totDistance = finalDistance(clusters, clusterCenters, data)
-        # print(clusters)
-        # print(totDistance)
     return clusters, totDistance
 
-
-# set baseline distance for autoCluster
 def oneCluster(graphArrays):
     """Summary
+        Finds a baseline to be used when the clustering type is set to auto.
 
     Args:
-        graphArrays (TYPE): Description
+        graphArrays (list): 2D Input data list
 
     Returns:
-        TYPE: Description
+        (list, int): Returns a list of averages and totalDistance between features
     """
     avgArray = []
     for i in range(len(graphArrays[0])):
@@ -307,13 +308,13 @@ def oneCluster(graphArrays):
 
 def autoKCluster(data, distCalc):
     """Summary
-
+        Generates clusters using autoK algorithm.
     Args:
-        data (TYPE): Description
-        distCalc (TYPE): Description
+        data (list): 2D list storing data
+        distCalc (int): Distance calculated using calculation methods
 
     Returns:
-        TYPE: Description
+        list: Returns a list of clusters
     """
     # get total distance from each cluster, stop when change in total distance from last cluser < 25%
     totDistancePerIteration = []
