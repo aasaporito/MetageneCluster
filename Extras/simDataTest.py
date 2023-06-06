@@ -1,11 +1,6 @@
 """Summary
-
-Attributes:
-    clusters (list): Description
-    firstHalf (list): Description
-    nodes (TYPE): Description
-    secondHalf (list): Description
-    simData (list): Description
+    Script for running a simulated data test. Data may be clustered
+    using different clustering algorithms as well as plotted pre clustering.
 """
 from Extras.hCluster import hCluster
 from kMeansClustering import kCluster
@@ -27,8 +22,6 @@ with open('simData2.txt','r') as df:
         #     firstHalf.append([float(vals[i]) for i in range(len(vals))])
         # else:
         #     secondHalf.append([float(vals[i]) for i in range(len(vals))])
-
-df.close()
 
 
 ### pre-cluster visulaization ###
