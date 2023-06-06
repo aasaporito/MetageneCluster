@@ -1,4 +1,5 @@
 """Summary
+
 """
 from Extras.tree import cluster
 
@@ -32,7 +33,6 @@ def calcMatrix(data):
     Returns:
         TYPE: Description
     """
-    n = len(data)
     distMatrix =[[] for i in range(len(data))]
     for i,feature1 in enumerate(data):
         for j,feature2 in enumerate(data):
@@ -207,9 +207,6 @@ def hCluster(numClusters,data):
         distMatrix = reduceMatrix(nextPair,distMatrix)
         
         n-=1 
-    
-    #root at first cluster
-    root = clusters[0]
     
     #split tree into clusters 
     clusters= divideClusters(numClusters,clusters[0])
