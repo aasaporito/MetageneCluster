@@ -108,7 +108,19 @@ Clone the repo:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+To run, open a terminal in the metaGenePlot directory.
+
+Run:
+  ```sh
+    python3 run.py file_name.sam file_name.gff feature streamDistance
+  ```
+
+Replacing: 
+  * file_name.sam and file_name.gff with your file paths. 
+  * feature -> i.e. gene, CDS
+  * streamDistance -> Integer distance between up and downstream for chromosomes.
+
+The program will store all generated output in ~/metaGenePlot/Outputs/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -124,10 +136,10 @@ Distributed under the X License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Contact
-#####Primary Author: 
+##### Primary Author: 
 Clayton Carter - [LinkedIn](https://www.linkedin.com/in/clayton-carter-51b393210) - [GitHub](https://github.com/ccarter11)
 
-#####Current Maintainer: 
+##### Current Maintainer: 
 Aaron Saporito - [LinkedIn](https://www.linkedin.com/in/aaron-saporito) - [GitHub](https://github.com/sapblatt11)
 
 

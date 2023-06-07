@@ -14,8 +14,8 @@ args = sys.argv  # [0]: script name
 
 sam_file = ""
 gff_file = ""
-feature_type = ""
-ud_stream = ""
+feature_type = "gene"
+ud_stream = 50
 
 if len(args) == 5:
     try:
@@ -26,13 +26,14 @@ if len(args) == 5:
     except:
         print("Invalid input, closing program")
         exit()
+elif len(args) == 3:
+    sam_file = args[1]
+    gff_file = args[2]
 else:
     print("Incorrect number of arguements, closing program")
     exit()
 
-try:
-    p = metaGenePlot(sam_file, gff_file, feature_type, ud_stream)
-    p.plot("auto", 500, d=1)
-except:
-    print("Ensure all inputs are meet the requirements, closing program")
-    exit()
+
+p = metaGenePlot(sam_file, gff_file, feature_type, ud_stream)
+p.plot("auto", 500, d=1)
+

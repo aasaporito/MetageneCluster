@@ -7,7 +7,6 @@ from kMeansClustering import autoKCluster, kCluster
 from plot import genPlot
 from writeOutput import writeNames, makeDir
 from Extras.hCluster import hCluster
-from Extras.tree import cluster
 
 
 def invertArray(feature):
