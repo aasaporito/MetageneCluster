@@ -8,6 +8,8 @@ from plot import genPlot
 from writeOutput import writeNames, makeDir
 from Extras.hCluster import hCluster
 
+import concurrent.futures
+from file_tools import *
 
 def invertArray(feature):
     """Summary
@@ -153,18 +155,14 @@ class metaGenePlot:
         Returns:
             (str, str): A tuple storing the raw data from .sam and .gff files
         """
+        concurrent.futures.ThreadPoolExecutor()
 
-        print('Reading SAM file...')
-        with open(sam, 'r') as samFile:
-            samLines = samFile.readlines()
-        samFile.close()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            f1 = executor.submit(parseSam, sam)
+            f2 = executor.submit(parseGff, gff)
+            
+        return f1.result(), f2.result()
 
-        print('Reading GFF file...')
-        with open(gff) as gffFile:
-            gffLines = gffFile.readlines()
-        gffFile.close()
-
-        return samLines, gffLines
 
     def __getChromLength(self):
         """Summary
@@ -244,6 +242,7 @@ class metaGenePlot:
         Args:
             chrom (int): The index of the chromosome within the .gff file
         """
+
         for line in self.__gffLines[chrom]:
             cols = line.split('\t')
             if len(cols) > 1 and cols[2] == self.feature:  # if feature of interest
@@ -290,7 +289,7 @@ class metaGenePlot:
                     else:  # zero, skip
                         self.trash.append(cols[8])
 
-        print('Gatherd ', chrom, ' data')
+        print('Gathered ', chrom, ' data')
 
     def __resetChrom(self):
         """Summary
@@ -308,8 +307,11 @@ class metaGenePlot:
 
         for chrom in self.__gffLines:
             if chrom in self.__samLines:
-                self.__populateChromosome(chrom)
-                self.__getGffArrays(chrom)
+                concurrent.futures.ThreadPoolExecutor()
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+                    executor.submit(self.__populateChromosome, chrom)
+                    executor.submit(self.__getGffArrays, chrom)
                 self.__resetChrom()
 
     def __normalizeArray(self, targetLength):
@@ -451,7 +453,7 @@ class metaGenePlot:
                 clusters.append(data)
 
         pathName = makeDir(self.gff[0:-4] + '1')
-
+        #todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
             featureNames = []
