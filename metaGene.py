@@ -157,12 +157,10 @@ class metaGenePlot:
         """
         concurrent.futures.ThreadPoolExecutor()
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             f1 = executor.submit(parseSam, sam)
             f2 = executor.submit(parseGff, gff)
             
-        print(len(f1.result()))
-        print(len(f2.result()))
         return f1.result(), f2.result()
 
 
@@ -223,6 +221,7 @@ class metaGenePlot:
         Args:
             chrom (int): The index of the chomosome within the .sam file
         """
+        print("Processing .sam data")
         for line in self.__samLines[chrom]:
             cols = line.split('\t')
             if len(cols) >= 10:
@@ -244,6 +243,8 @@ class metaGenePlot:
         Args:
             chrom (int): The index of the chromosome within the .gff file
         """
+        print("Processing .gff data")
+
         for line in self.__gffLines[chrom]:
             cols = line.split('\t')
             if len(cols) > 1 and cols[2] == self.feature:  # if feature of interest
@@ -308,8 +309,12 @@ class metaGenePlot:
 
         for chrom in self.__gffLines:
             if chrom in self.__samLines:
-                self.__populateChromosome(chrom)
-                self.__getGffArrays(chrom)
+                #todo
+                concurrent.futures.ThreadPoolExecutor()
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+                    executor.submit(__populateChromosome, self, chrom)
+                    executor.submit(__getGffArrays, self, chrom)
                 self.__resetChrom()
 
     def __normalizeArray(self, targetLength):
