@@ -8,6 +8,8 @@ from plot import genPlot
 from writeOutput import writeNames, makeDir
 from Extras.hCluster import hCluster
 
+import concurrent.futures
+from file_tools import *
 
 def invertArray(feature):
     """Summary
@@ -153,18 +155,15 @@ class metaGenePlot:
         Returns:
             (str, str): A tuple storing the raw data from .sam and .gff files
         """
+        concurrent.futures.ThreadPoolExecutor()
 
-        print('Reading SAM file...')
-        with open(sam, 'r') as samFile:
-            samLines = samFile.readlines()
-        samFile.close()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            f1 = executor.submit(parseSam, sam)
+            f2 = executor.submit(parseGff, gff)
+            
 
-        print('Reading GFF file...')
-        with open(gff) as gffFile:
-            gffLines = gffFile.readlines()
-        gffFile.close()
+            return f1.result(), f2.result()
 
-        return samLines, gffLines
 
     def __getChromLength(self):
         """Summary
