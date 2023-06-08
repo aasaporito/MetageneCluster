@@ -161,7 +161,8 @@ class metaGenePlot:
             f1 = executor.submit(parseSam, sam)
             f2 = executor.submit(parseGff, gff)
             
-
+        print(len(f1.result()))
+        print(len(f2.result()))
         return f1.result(), f2.result()
 
 
