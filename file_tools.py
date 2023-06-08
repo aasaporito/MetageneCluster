@@ -1,4 +1,4 @@
-
+# Helper functions for __ParseData in metaGene.py
 def parseSam(sam):
     samLines = None
     print('Reading SAM file...')
@@ -7,7 +7,8 @@ def parseSam(sam):
     samFile.close()
 
     return samLines
-
+    
+# Helper functions for __ParseData in metaGene.py
 def parseGff(gff):
     gffLines = None
     print('Reading GFF file...')

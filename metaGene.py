@@ -453,7 +453,7 @@ class metaGenePlot:
                 clusters.append(data)
 
         pathName = makeDir(self.gff[0:-4] + '1')
-
+        #todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
             featureNames = []
