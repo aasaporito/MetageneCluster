@@ -162,7 +162,7 @@ class metaGenePlot:
             f2 = executor.submit(parseGff, gff)
             
 
-            return f1.result(), f2.result()
+        return f1.result(), f2.result()
 
 
     def __getChromLength(self):
