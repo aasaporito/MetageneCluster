@@ -221,7 +221,6 @@ class metaGenePlot:
         Args:
             chrom (int): The index of the chomosome within the .sam file
         """
-        print("Processing .sam data")
         for line in self.__samLines[chrom]:
             cols = line.split('\t')
             if len(cols) >= 10:
@@ -243,7 +242,6 @@ class metaGenePlot:
         Args:
             chrom (int): The index of the chromosome within the .gff file
         """
-        print("Processing .gff data")
 
         for line in self.__gffLines[chrom]:
             cols = line.split('\t')
@@ -291,7 +289,7 @@ class metaGenePlot:
                     else:  # zero, skip
                         self.trash.append(cols[8])
 
-        print('Gatherd ', chrom, ' data')
+        print('Gathered ', chrom, ' data')
 
     def __resetChrom(self):
         """Summary
