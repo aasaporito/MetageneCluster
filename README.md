@@ -1,13 +1,11 @@
 
 <a name="readme-top"></a>
-
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![License: MPL 2.0][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
 
 
 <h3 align="center">metaGenePlot</h3>
@@ -131,15 +129,15 @@ Project Link: [https://github.com/sapblatt11/metaGenePlot](https://github.com/cc
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/ccarter11/metaGenePlot.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/ccarter11/metaGenePlot.svg?style=flat-square
 [contributors-url]: https://github.com/ccarter11/metaGenePlot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ccarter11/metaGenePlot.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/ccarter11/metaGenePlot.svg?style=flat-square
 [forks-url]: https://github.com/ccarter11/metaGenePlot/network/members
-[stars-shield]: https://img.shields.io/github/stars/ccarter11/metaGenePlot.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/ccarter11/metaGenePlot.svg?style=flat-square
 [stars-url]: https://github.com/ccarter11/metaGenePlot/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ccarter11/metaGenePlot.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/ccarter11/metaGenePlot.svg?style=flat-square
 [issues-url]: https://github.com/ccarter11/metaGenePlot/issues
-[license-shield]: https://img.shields.io/github/license/ccarter11/metaGenePlot.svg?style=for-the-badge
-[license-url]: https://github.com/ccarter11/metaGenePlot/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[license-shield]: https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg?style=flat-square
+[license-url]: https://github.com/sapblatt11/metaGenePlot/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&color=blue
 [linkedin-url]: https://linkedin.com/in/aaron-saporito
