@@ -111,7 +111,7 @@ The program will store all generated output in ~/metaGenePlot/Outputs/
 <!-- LICENSE -->
 ## License
 
-Distributed under the TODO License. See `LICENSE.txt` for more information.
+Distributed under the Mozilla Public License Version 2.0 License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
