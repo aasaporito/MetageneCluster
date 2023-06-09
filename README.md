@@ -13,7 +13,7 @@
 <h3 align="center">metaGenePlot</h3>
 
   <p align="center">
-    project_description
+    metaGenePlot generates metagene analysis plots for a given feature within a .gff/.gtf file when paired with a corresponding SAM file.
     <br />
   </p>
 </div>
@@ -47,12 +47,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-TODO
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 ### Built With
@@ -105,6 +99,8 @@ Replacing:
 
 The program will store all generated output in ~/metaGenePlot/Outputs/
 
+
+Note: The script may be run without specifying feature or streamDistance. Default values of 'CDS' and 50 will be used in this case.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
