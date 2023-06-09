@@ -1,11 +1,13 @@
+***
+Copyright 2023:
+    Clayton Carter:https://github.com/ccarter11/
+    Aaron Saporito: https://github.com/sapblatt11/ 
+***
+
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-
-Copyright 2023:
-    Clayton Carter:https://github.com/ccarter11/
-    Aaron Saporito: https://github.com/sapblatt11/ 
 
 Mozilla Public License Version 2.0
 ==================================
@@ -340,7 +342,9 @@ publish new versions of this License. Each version will be given a
 distinguishing version number.
 
 10.2. Effect of New Versions
-
+If You choose to distribute Source Code Form that is Incompatible With
+Secondary Licenses under the terms of this version of the License, the
+notice described in Exhibit B of this License must be attached.
 You may distribute the Covered Software under the terms of the version
 of the License under which You originally received the Covered Software,
 or under the terms of any subsequent version published by the license
