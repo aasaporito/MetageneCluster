@@ -14,7 +14,7 @@ args = sys.argv  # [0]: script name
 
 sam_file = ""
 gff_file = ""
-feature_type = "gene"
+feature_type = "CDS"
 ud_stream = 50
 
 if len(args) == 5:
