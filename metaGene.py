@@ -109,8 +109,8 @@ class metaGenePlot:
             sam_file, gff_file)  # set file variables
         self.__samLength = len(self.__samLines)
         self.__gffLength = len(self.__gffLines)
-        self.gff = gff_file
-        self.sam = sam_file
+        self.sam = sam_file.split("/")[-1]
+        self.gff = gff_file.split("/")[-1]
         self.feature = featureType
         self.names = []
         self.__upDown = udStream
@@ -160,7 +160,7 @@ class metaGenePlot:
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             f1 = executor.submit(parseSam, sam)
             f2 = executor.submit(parseGff, gff)
-            
+
         return f1.result(), f2.result()
 
 
@@ -183,12 +183,15 @@ class metaGenePlot:
                     chroms[chrom] = []
                     chroms[chrom].append(line)
 
-            if (len(cols) > 1) and int(cols[4]) > maxLength:
-
-                # farthest point in chromosome
-                maxLength = int(cols[4])
-                if firstChrom == None:
-                    firstChrom = cols[0]
+            if (len(cols) > 1) :
+                try:
+                    if int(cols[4]) > maxLength:
+                        # farthest point in chromosome
+                        maxLength = int(cols[4])
+                        if firstChrom == None:
+                            firstChrom = cols[0]
+                except:
+                    print("End of gff sort")
 
         self.__gffLines = chroms
 
