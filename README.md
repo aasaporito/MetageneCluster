@@ -87,7 +87,7 @@ To run, open a terminal in the metaGenePlot directory.
 
 Run:
   ```sh
-    python3 run.py "file_name.sam" "file_name.gff" feature streamDistance
+    python3 run.py file_name.sam file_name.gff feature streamDistance
   ```
 
 Replacing: 
