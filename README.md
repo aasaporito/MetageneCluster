@@ -91,14 +91,14 @@ Run:
   ```
 
 Replacing: 
-  * file_name.sam and file_name.gff with your file paths. 
-  * feature -> i.e. gene, CDS
-  * streamDistance -> Integer distance between up and downstream for chromosomes.
+  * file_name.sam -> Your input aligned .sam file with path.
+  * file_name.gff -> Your input annotation file file with path.
+  * feature -> The feature you want to build your metagene plots from.  i.e. gene, CDS (Default: 'CDS')
+  * streamDistance -> Integer distance up and downstream of your feature of interest to be included in the plot (Default: 50)
 
 The program will store all generated output in ~/metaGenePlot/Outputs/
 
 
-Note: The script may be run without specifying feature or streamDistance. Default values of 'CDS' and 50 will be used in this case.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
