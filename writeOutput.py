@@ -14,8 +14,8 @@ def writeNames(names, fileName, dirName):
         dirName (str): Name for the output folder within Outputs/
     """
 
-
-    with open('Outputs/' + dirName + '/' + fileName, 'w') as record:
+    print('Outputs/' + fileName + '/' + dirName)
+    with open('Outputs/' + fileName + '/' + dirName, 'w') as record:
         for name in names:
             line = str(name)
             record.write(line)

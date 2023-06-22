@@ -122,6 +122,7 @@ class metaGenePlot:
         self.trash = []
         self.__strand = []
 
+    
     def sort(self):
         """Summary
             Divides sam file by chromosome. Results are stored in self.__samLines
@@ -455,7 +456,7 @@ class metaGenePlot:
                 data = node.getIdxs()
                 clusters.append(data)
 
-        pathName = makeDir(self.gff[0:-4] + '1')
+        pathName = makeDir(self.sam + '1')
         #todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
@@ -477,4 +478,4 @@ class metaGenePlot:
             print("Plotting data...", len(cluster))
             genPlot(avgArray, name, pathName, self.__upDown, len(cluster))
             writeNames(
-                featureNames, self.gff[0:-4] + '_' + self.feature + '_' + str(i), pathName)
+                featureNames,pathName, self.gff[0:-4] + '_' + self.feature + '_' + str(1))
