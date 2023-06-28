@@ -1,5 +1,5 @@
 """Summary
-	File to run to execute the program from the command line.  See README.md for specifications and usage.
+    File to run to execute the program from the command line.  See README.md for specifications and usage.
 
 Attributes:
     feature_type (str): Description
@@ -16,24 +16,29 @@ sam_file = ""
 gff_file = ""
 feature_type = "CDS"
 ud_stream = 50
+clustering = True
 
-if len(args) == 5:
+if len(args) == 6:
     try:
-        sam_file = args[1]
-        gff_file = args[2]
-        feature_type = args[3]
-        ud_stream = int(args[4])
+        sam_file = args[2]
+        gff_file = args[3]
+        feature_type = args[4]
+        ud_stream = int(args[5])
     except:
         print("Invalid input, closing program")
         exit()
-elif len(args) == 3:
-    sam_file = args[1]
-    gff_file = args[2]
+elif len(args) == 4:
+    print(args)
+    if args[1] == "-u":
+        clustering = False
+    elif args[1] == "-c":
+        clustering = True
+    sam_file = args[2]
+    gff_file = args[3]
 else:
     print("Incorrect number of arguements, closing program")
     exit()
 
-
-p = metaGenePlot(sam_file, gff_file, feature_type, ud_stream)
+print(clustering)
+p = metaGenePlot(sam_file, gff_file, feature_type, ud_stream, clustering=clustering)
 p.plot("auto", 500, d=1)
-

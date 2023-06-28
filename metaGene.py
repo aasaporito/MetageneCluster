@@ -4,12 +4,13 @@
 """
 import math
 from kMeansClustering import autoKCluster, kCluster
-from plot import genPlot
+from plot import *
 from writeOutput import writeNames, makeDir
 from Extras.hCluster import hCluster
 
 import concurrent.futures
 from file_tools import *
+
 
 def invertArray(feature):
     """Summary
@@ -94,7 +95,7 @@ class metaGenePlot:
         trash (list): Stores removed features (features that are all 0's.)
     """
 
-    def __init__(self, sam_file: str, gff_file: str, featureType: str, udStream: int = 0, sorted=True):
+    def __init__(self, sam_file: str, gff_file: str, featureType: str, udStream: int = 0, sorted=True, clustering=True):
         """Summary
             Constructor for metaGenePlot class.
 
@@ -121,8 +122,8 @@ class metaGenePlot:
         self.__upDownStream = []  # up down stream data tuples
         self.trash = []
         self.__strand = []
+        self.clustering = clustering
 
-    
     def sort(self):
         """Summary
             Divides sam file by chromosome. Results are stored in self.__samLines
@@ -164,7 +165,6 @@ class metaGenePlot:
 
         return f1.result(), f2.result()
 
-
     def __getChromLength(self):
         """Summary
             Finds the max length and sorts .gff entries by chromosome.
@@ -184,7 +184,7 @@ class metaGenePlot:
                     chroms[chrom] = []
                     chroms[chrom].append(line)
 
-            if (len(cols) > 1) :
+            if (len(cols) > 1):
                 try:
                     if int(cols[4]) > maxLength:
                         # farthest point in chromosome
@@ -404,6 +404,19 @@ class metaGenePlot:
             graphArrays.append(currArray)
         return graphArrays
 
+      # Plot without clustering
+    def plotUn(self, numClusters: int, length: int):
+        self.__buildData()
+        trendData = self.__normalizeArray(length)
+        avgArray = averageArray(trendData)
+        featureNames = self.names[0]
+        pathName = makeDir(self.sam + '1')
+        name = self.gff[0:-4] + ' ' + self.feature + ' Unclustered ' + str(0)
+        genPlotUn(avgArray, name, pathName, self.__upDown, len(trendData))
+        writeNames(featureNames, pathName,
+                   self.gff[0:-4] + '_' + self.feature + '_' + str(1))
+        exit()
+
     def plot(self, numClusters: int, length: int, clusterUpDown: bool =False, d=0, clusterAlgo='k'):
         """Summary
             Create and saves the plot of a metaGenePlot and saves the data to disk.
@@ -417,8 +430,13 @@ class metaGenePlot:
             clusterAlgo (str, optional): Cluster algorithim to utilize. Values may be 'k' or 'h'. Default: k
 
         Returns:
-            None: 
+            None:
         """
+        print(self.clustering)
+        if not self.clustering:
+            self.plotUn(numClusters, length)
+            print("Graphing unclustered data.")
+
         self.__buildData()
 
         print("Normalizing feature length...")
@@ -457,7 +475,7 @@ class metaGenePlot:
                 clusters.append(data)
 
         pathName = makeDir(self.sam + '1')
-        #todo multithread plotting
+        # todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
             featureNames = []
@@ -475,7 +493,6 @@ class metaGenePlot:
 
             avgArray = averageArray(clusterData)
 
-            print("Plotting data...", len(cluster))
             genPlot(avgArray, name, pathName, self.__upDown, len(cluster))
             writeNames(
-                featureNames,pathName, self.gff[0:-4] + '_' + self.feature + '_' + str(1))
+                featureNames, pathName, self.gff[0:-4] + '_' + self.feature + '_' + str(1))
