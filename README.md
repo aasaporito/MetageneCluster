@@ -91,7 +91,7 @@ Run:
   ```
 
 Replacing: 
-  * -c -> May be set to -u to produce an unclustered plot. (-c indicates clustering)
+  * -c -> Indicates that you want to cluster your features by similarity. May be set to -u to produce a single, unclustered metagene plot. (Default: -c)
   * file_name.sam -> Your input aligned .sam file with path.
   * file_name.gff -> Your input annotation file file with path.
   * feature -> The feature you want to build your metagene plots from.  i.e. gene, CDS (Default: 'CDS')
