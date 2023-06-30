@@ -73,7 +73,7 @@ Run in a terminal:
 
 Clone the repo:
   ```sh
-  git clone https://github.com/sapblatt11/metaGenePlot.git
+  git clone https://github.com/ccarter11/metaGenePlot.git
   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
