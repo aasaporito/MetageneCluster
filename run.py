@@ -24,11 +24,16 @@ if len(args) == 6:
         gff_file = args[3]
         feature_type = args[4]
         ud_stream = int(args[5])
+
+        if args[1] == "-u":
+            clustering = False
+        elif args[1] == "-c":
+            clustering = True
     except:
         print("Invalid input, closing program")
         exit()
 elif len(args) == 4:
-    
+
     if args[1] == "-u":
         clustering = False
     elif args[1] == "-c":
@@ -39,5 +44,6 @@ else:
     print("Incorrect number of arguements, closing program")
     exit()
 
-p = metaGenePlot(sam_file, gff_file, feature_type, ud_stream, clustering=clustering)
+p = metaGenePlot(sam_file, gff_file, feature_type,
+                 ud_stream, clustering=clustering)
 p.plot("auto", 500, d=1)
