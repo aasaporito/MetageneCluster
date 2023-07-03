@@ -495,4 +495,4 @@ class metaGenePlot:
 
             genPlot(avgArray, name, pathName, self.__upDown, len(cluster))
             writeNames(
-                featureNames, pathName, self.gff[0:-4] + '_' + self.feature + '_' + str(1))
+                featureNames, pathName, self.gff[0:-4] + '_' + self.feature + '_' + str(i+1))
