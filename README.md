@@ -122,7 +122,7 @@ Aaron Saporito - [LinkedIn](https://www.linkedin.com/in/aaron-saporito) - [GitHu
 
 
 
-Project Link: [https://github.com/sapblatt11/metaGenePlot](https://github.com/ccarter11/metaGenePlot)
+Project Link: [https://github.com/ccarter11/metaGenePlot](https://github.com/ccarter11/metaGenePlot)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
