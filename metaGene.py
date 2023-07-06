@@ -410,11 +410,12 @@ class metaGenePlot:
         trendData = self.__normalizeArray(length)
         avgArray = averageArray(trendData)
         featureNames = self.names[0]
-        pathName = makeDir(self.sam + '1')
-        name = self.gff[0:-4] + ' ' + self.feature + ' Unclustered ' + str(0)
+        pathName = makeDir(self.sam.split(".")[0])
+        
+        name = pathName + ' ' + self.feature + ' Unclustered ' + str(0) # 0? todo
         genPlotUn(avgArray, name, pathName, self.__upDown, len(trendData))
         writeNames(featureNames, pathName,
-                   self.gff[0:-4] + '_' + self.feature + '_' + str(1))
+                   self.sam[0:-4] + '_' + self.feature + '_' + str(1))
         exit()
 
     def plot(self, numClusters: int, length: int, clusterUpDown: bool =False, d=0, clusterAlgo='k'):
@@ -432,7 +433,6 @@ class metaGenePlot:
         Returns:
             None:
         """
-        print(self.clustering)
         if not self.clustering:
             self.plotUn(numClusters, length)
             print("Graphing unclustered data.")
@@ -474,13 +474,13 @@ class metaGenePlot:
                 data = node.getIdxs()
                 clusters.append(data)
 
-        pathName = makeDir(self.sam + '1')
+        pathName = makeDir(self.sam.split(".")[0])
         # todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
             featureNames = []
             clusterStrands = []
-            name = self.gff[0:-4] + ' ' + self.feature + ' cluster ' + str(i)
+            name = pathName + ' ' + self.feature + ' cluster ' + str(i + 1)
             for feature in cluster:
                 featureNames.append(self.names[feature])
                 clusterStrands.append(self.__strand[feature])
@@ -495,4 +495,4 @@ class metaGenePlot:
 
             genPlot(avgArray, name, pathName, self.__upDown, len(cluster))
             writeNames(
-                featureNames, pathName, self.gff[0:-4] + '_' + self.feature + '_' + str(i+1))
+                featureNames, pathName, self.sam[0:-4] + '_' + self.feature + '_' + str(i+1))
