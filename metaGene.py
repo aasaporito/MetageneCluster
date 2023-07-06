@@ -412,7 +412,7 @@ class metaGenePlot:
         featureNames = self.names[0]
         pathName = makeDir(self.sam.split(".")[0])
         
-        name = pathName + ' ' + self.feature + ' Unclustered ' + str(0) # 0? todo
+        name = pathName + ' ' + self.feature + ' Unclustered ' # 0? todo
         genPlotUn(avgArray, name, pathName, self.__upDown, len(trendData))
         writeNames(featureNames, pathName,
                    self.sam[0:-4] + '_' + self.feature + '_' + str(1))
