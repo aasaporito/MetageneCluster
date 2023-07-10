@@ -17,6 +17,7 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
         udStream (int): Distance between chromosomes.
         numFeatures (int): The number of features (utilized in the plot title)
     """
+    print("Generating Unclustered plot")
     y = np.array(result)
     x = np.arange(len(y))
 
@@ -55,6 +56,7 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
         udStream (int): Distance between chromosomes.
         numFeatures (int): The number of features (utilized in the plot title)
     """
+    print("Generating clustered plot")
     y = np.array(result)
     x = np.arange(len(y))
 

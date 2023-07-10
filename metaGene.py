@@ -95,7 +95,7 @@ class metaGenePlot:
         trash (list): Stores removed features (features that are all 0's.)
     """
 
-    def __init__(self, sam_file: str, gff_file: str, featureType: str, udStream: int = 0, sorted=True, clustering=True):
+    def __init__(self, sam_file: str, gff_file: str, featureType: str, udStream: int = 0, sorted=True, clustering=2):
         """Summary
             Constructor for metaGenePlot class.
 
@@ -414,9 +414,9 @@ class metaGenePlot:
         
         name = pathName + ' ' + self.feature + ' Unclustered ' # 0? todo
         genPlotUn(avgArray, name, pathName, self.__upDown, len(trendData))
-        writeNames(featureNames, pathName,
-                   self.sam[0:-4] + '_' + self.feature + '_' + str(1))
-        exit()
+
+        if self.clustering == 1:
+            exit()
 
     def plot(self, numClusters: int, length: int, clusterUpDown: bool =False, d=0, clusterAlgo='k'):
         """Summary
@@ -433,14 +433,15 @@ class metaGenePlot:
         Returns:
             None:
         """
-        if not self.clustering:
+        if self.clustering == 1 or self.clustering == 3:
             self.plotUn(numClusters, length)
             print("Graphing unclustered data.")
-
-        self.__buildData()
-
-        print("Normalizing feature length...")
+        else:
+            self.__buildData()
+            print("Normalizing feature length...")
         trendData = self.__normalizeArray(length)
+
+        
 
         if clusterAlgo == 'k':
             if numClusters == 1:  # for one cluster just average all data

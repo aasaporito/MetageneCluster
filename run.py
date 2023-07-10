@@ -16,7 +16,7 @@ sam_file = ""
 gff_file = ""
 feature_type = "CDS"
 ud_stream = 50
-clustering = True
+clustering = 2
 
 if len(args) == 6:
     try:
@@ -26,20 +26,25 @@ if len(args) == 6:
         ud_stream = int(args[5])
 
         if args[1] == "-u":
-            clustering = False
+            clustering = 1
         elif args[1] == "-c":
-            clustering = True
+            clustering = 2
+        elif args[1] == "-uc" or args[1] == "-cu":
+            clustering = 3
     except:
         print("Invalid input, closing program")
         exit()
 elif len(args) == 4:
 
     if args[1] == "-u":
-        clustering = False
+        clustering = 1
     elif args[1] == "-c":
-        clustering = True
+        clustering = 2
+    elif args[1] == "-uc" or args[1] == "-cu":
+        clustering = 3
     sam_file = args[2]
     gff_file = args[3]
+
 else:
     print("Incorrect number of arguements, closing program")
     exit()
