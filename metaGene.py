@@ -123,6 +123,7 @@ class metaGenePlot:
         self.trash = []
         self.__strand = []
         self.clustering = clustering
+        self.pathName = ""
 
     def sort(self):
         """Summary
@@ -410,10 +411,10 @@ class metaGenePlot:
         trendData = self.__normalizeArray(length)
         avgArray = averageArray(trendData)
         featureNames = self.names[0]
-        pathName = makeDir(self.sam.split(".")[0])
+        self.pathName = makeDir(self.sam.split(".")[0])
         
-        name = pathName + ' ' + self.feature + ' Unclustered ' # 0? todo
-        genPlotUn(avgArray, name, pathName, self.__upDown, len(trendData))
+        name = self.pathName + ' ' + self.feature + ' Unclustered ' # 0? todo
+        genPlotUn(avgArray, name, self.pathName, self.__upDown, len(trendData))
 
         if self.clustering == 1:
             exit()
@@ -439,6 +440,7 @@ class metaGenePlot:
         else:
             self.__buildData()
             print("Normalizing feature length...")
+            self.pathName = makeDir(self.sam.split(".")[0])
         trendData = self.__normalizeArray(length)
 
         
@@ -475,13 +477,13 @@ class metaGenePlot:
                 data = node.getIdxs()
                 clusters.append(data)
 
-        pathName = makeDir(self.sam.split(".")[0])
+        
         # todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
             featureNames = []
             clusterStrands = []
-            name = pathName + ' ' + self.feature + ' cluster ' + str(i + 1)
+            name = self.pathName + ' ' + self.feature + ' cluster ' + str(i + 1)
             for feature in cluster:
                 featureNames.append(self.names[feature])
                 clusterStrands.append(self.__strand[feature])
@@ -494,6 +496,6 @@ class metaGenePlot:
 
             avgArray = averageArray(clusterData)
 
-            genPlot(avgArray, name, pathName, self.__upDown, len(cluster))
+            genPlot(avgArray, name, self.pathName, self.__upDown, len(cluster))
             writeNames(
-                featureNames, pathName, self.sam[0:-4] + '_' + self.feature + '_' + str(i+1))
+                featureNames, self.pathName, self.sam[0:-4] + '_' + self.feature + '_' + str(i+1))
