@@ -78,6 +78,7 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
     plt.title(fname + ' (' + str(numFeatures) + ')')
     plt.xlabel('Distance')
     plt.ylabel('Reads')
+    plt.xticks([])
 
     path = fname + ".png"  # in case of single plot
     if dirName != None:
