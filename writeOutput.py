@@ -41,7 +41,7 @@ def makeDir(name):
             num = 1
             newName = name + " " + str(num)
         path = 'Outputs/' + newName
-        print(path)
+    print(path)
 
     os.makedirs(path)
     return newName

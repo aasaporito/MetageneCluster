@@ -15,7 +15,7 @@ args = sys.argv  # [0]: script name
 sam_file = ""
 gff_file = ""
 feature_type = "CDS"
-ud_stream = 50
+ud_stream = 500
 clustering = 2
 
 if len(args) == 6:
@@ -35,7 +35,6 @@ if len(args) == 6:
         print("Invalid input, closing program")
         exit()
 elif len(args) == 4:
-
     if args[1] == "-u":
         clustering = 1
     elif args[1] == "-c":
@@ -51,4 +50,4 @@ else:
 
 p = metaGenePlot(sam_file, gff_file, feature_type,
                  ud_stream, clustering=clustering)
-p.plot("auto", 500, d=1)
+p.plot("auto", ud_stream, d=1)
