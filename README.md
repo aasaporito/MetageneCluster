@@ -119,7 +119,7 @@ Distributed under the Mozilla Public License Version 2.0 License. See `LICENSE.t
 Clayton Carter - [LinkedIn](https://www.linkedin.com/in/clayton-carter-51b393210) - [GitHub](https://github.com/aasaporito)
 
 ##### Current Maintainer: 
-Aaron Saporito - [LinkedIn](https://www.linkedin.com/in/aaron-saporito) - [GitHub](https://github.com/sapblatt11)
+Aaron Saporito - [LinkedIn](https://www.linkedin.com/in/aaron-saporito) - [GitHub](https://github.com/aasaporito)
 
 
 
@@ -140,6 +140,6 @@ Project Link: [https://github.com/aasaporito/MetageneCluster](https://github.com
 [issues-shield]: https://img.shields.io/github/issues/aasaporito/MetageneCluster.svg?style=flat-square
 [issues-url]: https://github.com/aasaporito/MetageneCluster/issues
 [license-shield]: https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg?style=flat-square
-[license-url]: https://github.com/sapblatt11/MetageneCluster/blob/master/LICENSE.txt
+[license-url]: https://github.com/aasaporito/MetageneCluster/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&color=blue
 [linkedin-url]: https://linkedin.com/in/aaron-saporito
