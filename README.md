@@ -8,10 +8,10 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
-<h3 align="center">metaGenePlot</h3>
+<h3 align="center">MetageneCluster</h3>
 
   <p align="center">
-    metaGenePlot generates metagene analysis plots for a given feature within a .gff/.gtf file when paired with a corresponding SAM file.
+    MetageneCluster generates metagene analysis plots for a given feature within a .gff/.gtf file when paired with a corresponding SAM file.
     <br />
   </p>
 </div>
@@ -73,7 +73,7 @@ Run in a terminal:
 
 Clone the repo:
   ```sh
-  git clone https://github.com/ccarter11/metaGenePlot.git
+  git clone https://github.com/aasaporito/MetageneCluster.git
   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -83,7 +83,7 @@ Clone the repo:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-To run, open a terminal in the metaGenePlot directory.
+To run, open a terminal in the MetageneCluster directory.
 
 Run:
   ```sh
@@ -97,7 +97,7 @@ Replacing:
   * feature -> The feature you want to build your metagene plots from.  i.e. gene, CDS (Default: 'CDS')
   * streamDistance -> Integer distance up and downstream of your feature of interest to be included in the plot (Default: 50)
 
-The program will store all generated output in ~/metaGenePlot/Outputs/
+The program will store all generated output in ~/MetageneCluster/Outputs/
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -115,14 +115,14 @@ Distributed under the Mozilla Public License Version 2.0 License. See `LICENSE.t
 <!-- CONTACT -->
 ## Contact
 ##### Primary Author: 
-Clayton Carter - [LinkedIn](https://www.linkedin.com/in/clayton-carter-51b393210) - [GitHub](https://github.com/ccarter11)
+Clayton Carter - [LinkedIn](https://www.linkedin.com/in/clayton-carter-51b393210) - [GitHub](https://github.com/aasaporito)
 
 ##### Current Maintainer: 
 Aaron Saporito - [LinkedIn](https://www.linkedin.com/in/aaron-saporito) - [GitHub](https://github.com/sapblatt11)
 
 
 
-Project Link: [https://github.com/ccarter11/metaGenePlot](https://github.com/ccarter11/metaGenePlot)
+Project Link: [https://github.com/aasaporito/MetageneCluster](https://github.com/aasaporito/MetageneCluster)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -130,15 +130,15 @@ Project Link: [https://github.com/ccarter11/metaGenePlot](https://github.com/cca
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/ccarter11/metaGenePlot.svg?style=flat-square
-[contributors-url]: https://github.com/ccarter11/metaGenePlot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ccarter11/metaGenePlot.svg?style=flat-square
-[forks-url]: https://github.com/ccarter11/metaGenePlot/network/members
-[stars-shield]: https://img.shields.io/github/stars/ccarter11/metaGenePlot.svg?style=flat-square
-[stars-url]: https://github.com/ccarter11/metaGenePlot/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ccarter11/metaGenePlot.svg?style=flat-square
-[issues-url]: https://github.com/ccarter11/metaGenePlot/issues
+[contributors-shield]: https://img.shields.io/github/contributors/aasaporito/MetageneCluster.svg?style=flat-square
+[contributors-url]: https://github.com/aasaporito/MetageneCluster/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/aasaporito/MetageneCluster.svg?style=flat-square
+[forks-url]: https://github.com/aasaporito/MetageneCluster/network/members
+[stars-shield]: https://img.shields.io/github/stars/aasaporito/MetageneCluster.svg?style=flat-square
+[stars-url]: https://github.com/aasaporito/MetageneCluster/stargazers
+[issues-shield]: https://img.shields.io/github/issues/aasaporito/MetageneCluster.svg?style=flat-square
+[issues-url]: https://github.com/aasaporito/MetageneCluster/issues
 [license-shield]: https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg?style=flat-square
-[license-url]: https://github.com/sapblatt11/metaGenePlot/blob/master/LICENSE.txt
+[license-url]: https://github.com/sapblatt11/MetageneCluster/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&color=blue
 [linkedin-url]: https://linkedin.com/in/aaron-saporito
