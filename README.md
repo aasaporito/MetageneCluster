@@ -1,5 +1,3 @@
-<h1> This Project has been moved to https://github.com/aasaporito/MetageneCluster  </h1> <br/>
-
 <a name="readme-top"></a>
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -116,7 +114,7 @@ Distributed under the Mozilla Public License Version 2.0 License. See `LICENSE.t
 <!-- CONTACT -->
 ## Contact
 ##### Primary Author: 
-Clayton Carter - [LinkedIn](https://www.linkedin.com/in/clayton-carter-51b393210) - [GitHub](https://github.com/aasaporito)
+Clayton Carter - [LinkedIn](https://www.linkedin.com/in/clayton-carter-51b393210) - [GitHub](https://github.com/ccarter11)
 
 ##### Current Maintainer: 
 Aaron Saporito - [LinkedIn](https://www.linkedin.com/in/aaron-saporito) - [GitHub](https://github.com/aasaporito)
