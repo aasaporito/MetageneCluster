@@ -1,5 +1,5 @@
 """Summary
-    File to run to execute the program from the command line.  See README.md for specifications and usage.
+    File to run to execute the program from the command line.  See README.md for specifications and usage
 
 Attributes:
     feature_type (str): Description
