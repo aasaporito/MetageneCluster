@@ -329,5 +329,9 @@ def autoKCluster(data, distCalc):
             totDistancePerIteration[numClusters - 1] - totDistancePerIteration[numClusters - 2])
         print(diff)
         numClusters += 1
+    if totDistancePerIteration[1] > (.2 * (totDistancePerIteration[0])):
+        numClusters = 1
+        clusters, totDistance = kCluster(numClusters, data, distCalc)
+        numClusters = 2
     print('Best clusters:', numClusters - 1)
     return clusters
