@@ -312,11 +312,8 @@ class metaGenePlot:
 
         for chrom in self.__gffLines:
             if chrom in self.__samLines:
-                concurrent.futures.ThreadPoolExecutor()
-
-                with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-                    executor.submit(self.__populateChromosome, chrom)
-                    executor.submit(self.__getGffArrays, chrom)
+                self.__populateChromosome(chrom)
+                self.__getGffArrays(chrom)
                 self.__resetChrom()
 
     def __normalizeArray(self, targetLength):
