@@ -86,15 +86,16 @@ To run, open a terminal in the MetageneCluster directory.
 
 Run:
   ```sh
-    python3 run.py -c file_name.sam file_name.gff feature streamDistance
+    python3 run.py -c -s file_name.sam file_name.gff feature streamDistance
   ```
 
 Replacing: 
   * -c -> Indicates that you want to cluster your features by similarity. May be set to -u to produce a single, unclustered metagene plot or -cu to produce both an unclustered as well as clustered plots.
+  * -s -> Indicates that you want to cluster your features by shape rather than magnitude. May be set to -m to factor magnitude of signal into account when clustering.  Meaningless in unclustered mode.  (Default: -s)
   * file_name.sam -> Your input aligned .sam file with path.
   * file_name.gff -> Your input annotation file file with path.
-  * feature -> The feature you want to build your metagene plots from.  i.e. gene, CDS (Default: 'CDS')
-  * streamDistance -> Integer distance up and downstream of your feature of interest to be included in the plot (Default: 50)
+  * feature -> The feature you want to build your metagene plots from.  i.e. gene, CDS
+  * streamDistance -> Integer distance up and downstream of your feature of interest to be included in the plot (Default: 500)
 
 The program will store all generated output in ~/MetageneCluster/Outputs/
 
