@@ -59,6 +59,7 @@ elif len(args) == 6:
         gff_file = args[4]
         feature_type = args[5]
     else:
+        shape_or_magnitude = 1
         sam_file = args[2]
         gff_file = args[3]
         feature_type = args[4]
@@ -70,6 +71,7 @@ elif len(args) == 5:
         clustering = 2
     elif args[1] == "-uc" or args[1] == "-cu":
         clustering = 3
+    shape_or_magnitude = 1
     sam_file = args[2]
     gff_file = args[3]
     feature_type = args[4]
