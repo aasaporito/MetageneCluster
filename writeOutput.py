@@ -33,13 +33,10 @@ def makeDir(name):
     """
     newName = name
     path = 'Outputs/' + newName
+    num2Add = 0;
     while os.path.exists(path):  # path exists, create new sub file name
-        try:
-            num = int(newName[-1]) + 1
-            newName = newName[:-1] + str(num)
-        except:
-            num = 1
-            newName = name + " " + str(num)
+        num2Add = num2Add + 1
+        newName = name + " " + str(num)
         path = 'Outputs/' + newName
     print(path)
 
