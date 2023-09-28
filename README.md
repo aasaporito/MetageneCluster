@@ -84,18 +84,22 @@ Clone the repo:
 
 To run, open a terminal in the MetageneCluster directory.
 
-Run:
+Example:
   ```sh
-    python3 run.py -c -s file_name.sam file_name.gff feature streamDistance
+    python3 run.py -c -s file_name.sam file_name.gff CDS 500
   ```
 
-Replacing: 
-  * -c -> Indicates that you want to cluster your features by similarity. May be set to -u to produce a single, unclustered metagene plot or -cu to produce both an unclustered as well as clustered plots.
-  * -s -> Indicates that you want to cluster your features by shape rather than magnitude. May be set to -m to factor magnitude of signal into account when clustering.  Meaningless in unclustered mode.  (Default: -s)
-  * file_name.sam -> Your input aligned .sam file with path.
-  * file_name.gff -> Your input annotation file file with path.
-  * feature -> The feature you want to build your metagene plots from.  i.e. gene, CDS
-  * streamDistance -> Integer distance up and downstream of your feature of interest to be included in the plot (Default: 500)
+### Parameters
+| Argument | Function |
+| -------------------------------------------------| ------------------------------------------------- |
+| `-c, -u, -cu` | Indicates whether you want to cluster your data by similarity. May be set to -c to produce clustered metagene plots, -u to produce a single, unclustered metagene plot or -cu to produce both an unclustered as well as clustered plots.  Default: -c. |
+| `-s, -m` | Indicates whether you want to cluster by shape only or include magnitude.  May be set to -s to cluster by overall shape of plot or -m to factor magnitude of signal into account when clustering.  Meaningless in unclustered mode.  Default: -s. |
+| `-r, -R` | Indicates that you want to compute and plot the ratio of the first alignment file to the second.  If -r or -R are enabled, you must follow with two .sam files.  Default: disabled. |
+| `file_name.sam` | Your input aligned .sam file with path.  Must be two files separated by whitespace if -r is enabled. |
+| `file_name.gff` | Your input annotation file file with path. |
+| `feature` | The feature you want to build your metagene plots from.  i.e. gene, CDS. |
+| `streamDistance` | Integer distance up and downstream of your feature of interest to be included in the plot.  Included for context only, not used for caluclating which features cluster together. |
+| `dist_reduct` | Used to determine how many clusters, k, to build.  The methods selects the cluster number when the change in total distance from the last cluser number, k-1, has a smaller reduction than this value.  Must be between 0 and 1.  Default: 0.25 |
 
 The program will store all generated output in ~/MetageneCluster/Outputs/
 
