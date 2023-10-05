@@ -306,7 +306,7 @@ def oneCluster(graphArrays):
     return avgArray, totDistance
 
 
-def autoKCluster(data, distCalc):
+def autoKCluster(data, distCalc, dist_stop = 0.2):
     """Summary
         Generates clusters using autoK algorithm.
     Args:
@@ -316,13 +316,13 @@ def autoKCluster(data, distCalc):
     Returns:
         list: Returns a list of clusters
     """
-    # get total distance from each cluster, stop when change in total distance from last cluser < 25%
+    # get total distance from each cluster, stop when change in total distance from last cluser < dist_stop%
     totDistancePerIteration = []
     x, totDistance1 = oneCluster(data)  # baseline
     totDistancePerIteration.append(totDistance1)
     diff = totDistance1
     numClusters = 2
-    while diff > (.2 * (totDistancePerIteration[numClusters - 2])):
+    while diff > (dist_stop * (totDistancePerIteration[numClusters - 2])):
         clusters, totDistance = kCluster(numClusters, data, distCalc)
         totDistancePerIteration.append(totDistance)
         diff = abs(
@@ -331,7 +331,7 @@ def autoKCluster(data, distCalc):
         numClusters += 1
 
     diff = abs(totDistancePerIteration[1] - totDistancePerIteration[0])
-    if diff > (.2 * (totDistancePerIteration[0])):
+    if diff > (dist_stop * (totDistancePerIteration[0])):
         numClusters = 1
         clusters, totDistance = kCluster(numClusters, data, distCalc)
         numClusters = 2
