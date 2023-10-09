@@ -36,7 +36,7 @@ def makeDir(name):
     num2Add = 0;
     while os.path.exists(path):  # path exists, create new sub file name
         num2Add = num2Add + 1
-        newName = name + " " + str(num)
+        newName = name + " " + str(num2Add)
         path = 'Outputs/' + newName
     print(path)
 
