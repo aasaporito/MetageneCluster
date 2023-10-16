@@ -112,6 +112,7 @@ class metaGenePlot:
         self.__samLength = len(self.__samLines)
         self.__gffLength = len(self.__gffLines)
         self.sam = sam_file.split("/")[-1]
+        self.samLength = 0
         self.gff = gff_file.split("/")[-1]
         self.feature = featureType
         self.names = []
@@ -230,6 +231,7 @@ class metaGenePlot:
         for line in self.__samLines[chrom]:
             cols = line.split('\t')
             if len(cols) >= 10:
+                self.samLength = self.samLength + 1
                 start, seqLength = int(cols[3]), len(
                     cols[9])  # postion and sequence length
                 end = start + seqLength - 1
