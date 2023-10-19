@@ -95,12 +95,13 @@ class metaGenePlot:
         trash (list): Stores removed features (features that are all 0's.)
     """
 
-    def __init__(self, sam_file: str, gff_file: str, featureType: str, udStream: int = 0, sorted=True, clustering=2):
+    def __init__(self, sam_file: str, sam_file2: str, gff_file: str, featureType: str, udStream: int = 0, sorted=True, clustering=2):
         """Summary
             Constructor for metaGenePlot class.
 
         Args:
             sam_file (str): Name of the .sam file to use
+            sam_file2 (str): Name of the second .sam file to use, if applicable.  Filename is empty ("") if not applicable.
             gff_file (str): Name of the .gff file to use
             featureType (str): Feature type i.e. gene, CDS
             udStream (int, optional): The distance between up and down stream for chromosomes in .gff. Default = 0.
@@ -111,6 +112,7 @@ class metaGenePlot:
         self.__samLength = len(self.__samLines)
         self.__gffLength = len(self.__gffLines)
         self.sam = sam_file.split("/")[-1]
+        self.samLength = 0
         self.gff = gff_file.split("/")[-1]
         self.feature = featureType
         self.names = []
@@ -229,6 +231,7 @@ class metaGenePlot:
         for line in self.__samLines[chrom]:
             cols = line.split('\t')
             if len(cols) >= 10:
+                self.samLength = self.samLength + 1
                 start, seqLength = int(cols[3]), len(
                     cols[9])  # postion and sequence length
                 end = start + seqLength - 1
@@ -411,19 +414,24 @@ class metaGenePlot:
         self.pathName = makeDir(self.sam.split(".")[0])
         
         name = self.pathName + ' ' + self.feature + ' Unclustered ' # 0? todo
-        genPlotUn(avgArray, name, self.pathName, self.__upDown, len(trendData))
+        if self.__upDown > 0:  # include existing up/down stream data
+                avgDown, avgUp = averageUpDown(self.__upDownStream)
+                print(len(avgDown), len(avgArray), len(avgUp))
+                fullArray = avgDown + avgArray + avgUp
+        genPlotUn(fullArray, name, self.pathName, self.__upDown, len(trendData))
 
         if self.clustering == 1:
             exit()
 
-    def plot(self, numClusters: int, length: int, clusterUpDown: bool =False, d=0, clusterAlgo='k'):
+    def plot(self, numClusters: int, length: int, dist_reduct: float, clusterUpDown: bool =False, d=0, clusterAlgo='k'):
         """Summary
             Create and saves the plot of a metaGenePlot and saves the data to disk.
             The output is written to Output/(GFF seqname, source, feature)/
 
         Args:
             numClusters (int): Size of clusters. 'auto' allows for optimal clustering.
-            length (int): The feature length to normalize to
+            length (int): The feature length to normalize to.
+            dist_reduct (float): Stop adding more clusters when reduction in variation reaches this value.
             clusterUpDown (bool, optional): When false, upDownStream features are written. Default: False
             d (int, optional): Distance measure between 0 and 1 for clustering. Deault: 0
             clusterAlgo (str, optional): Cluster algorithim to utilize. Values may be 'k' or 'h'. Default: k
@@ -460,7 +468,7 @@ class metaGenePlot:
             elif(numClusters == 'auto'):  # find the optimal number of cluster for the given data
                 print("Fitting data...")
                 print('features:', len(trendData))
-                clusters = autoKCluster(trendData, d)
+                clusters = autoKCluster(trendData, d, dist_reduct)
             else:  # divide data into fixed number clusters
                 print("Fitting data...")
                 clusters, distance = kCluster(numClusters, trendData, d)
@@ -474,8 +482,6 @@ class metaGenePlot:
                 data = node.getIdxs()
                 clusters.append(data)
 
-        
-        # todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
             featureNames = []

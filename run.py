@@ -6,6 +6,7 @@ Attributes:
     shape_or_magnitude (str): Determines if we are clustering based on shape (1) or magnitude (2).
     ratio_of_files (str): Determines if we are clustering based on a single input file (0) or the ratio of first file:second file (1).
     sam_file (str): The input file in .sam format that contains the genomic signal to be analyzed.
+
     sam_file2 (str): The input file in .sam format that contains the genomic signal to divide sam_file's signal by when -r is enabled.
     gff_file (str): The input file in .gff format that contains the genomic regions to be analyzed.
     feature_type (str): The feature to be extracted from the gff for analysis, such as 'gene,' 'CDS,' or 'exon.'
