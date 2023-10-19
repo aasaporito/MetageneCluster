@@ -414,7 +414,11 @@ class metaGenePlot:
         self.pathName = makeDir(self.sam.split(".")[0])
         
         name = self.pathName + ' ' + self.feature + ' Unclustered ' # 0? todo
-        genPlotUn(avgArray, name, self.pathName, self.__upDown, len(trendData))
+        if self.__upDown > 0:  # include existing up/down stream data
+                avgDown, avgUp = averageUpDown(self.__upDownStream)
+                print(len(avgDown), len(avgArray), len(avgUp))
+                fullArray = avgDown + avgArray + avgUp
+        genPlotUn(fullArray, name, self.pathName, self.__upDown, len(trendData))
 
         if self.clustering == 1:
             exit()
@@ -478,8 +482,6 @@ class metaGenePlot:
                 data = node.getIdxs()
                 clusters.append(data)
 
-        
-        # todo multithread plotting
         for i, cluster in enumerate(clusters):
             clusterData = []
             featureNames = []

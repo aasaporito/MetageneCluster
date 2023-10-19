@@ -32,8 +32,10 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
 
     plt.figure(figsize=(15, 10))
     plt.plot(x[(len(x) - udStream - 1):len(x) - 1],
-             y[(len(x) - udStream - 1):len(x) - 1], linestyle="-.", color='red')
-    plt.plot(x[0:udStream - 1], y[0:udStream - 1], color='black')
+             y[(len(x) - udStream - 1):len(x) - 1], linestyle='-.', color='red')
+             
+    plt.plot(x[0:udStream - 1], y[0:udStream - 1], linestyle='-.', color='red')
+    
     plt.plot(x[udStream - 1:(len(x) - udStream - 1)],
              y[udStream - 1:(len(x) - udStream - 1)], color='black')
     plt.title(fname)
