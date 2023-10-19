@@ -86,7 +86,7 @@ To run, open a terminal in the MetageneCluster directory.
 
 Example:
   ```sh
-    python3 run.py -c -s file_name.sam file_name.gff CDS 500
+    python3 run.py -c -s file_name.sam file_name.gff CDS 500 1000
   ```
 
 ### Parameters
@@ -99,6 +99,7 @@ Example:
 | `file_name.gff` | Your input annotation file file with path. |
 | `feature` | The feature you want to build your metagene plots from.  i.e. gene, CDS. |
 | `streamDistance` | Integer distance up and downstream of your feature of interest to be included in the plot.  Included for context only, not used for caluclating which features cluster together. |
+| `norm_length` | Integer length in nucleotides that features should be normalized to.  |
 | `dist_reduct` | Used to determine how many clusters, k, to build.  The methods selects the cluster number when the change in total distance from the last cluser number, k-1, has a smaller reduction than this value.  Must be between 0 and 1.  Default: 0.25 |
 
 The program will store all generated output in ~/MetageneCluster/Outputs/
