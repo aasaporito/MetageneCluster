@@ -65,7 +65,7 @@ ud_stream = int(args[argsNum])
 argsNum = argsNum + 1
 norm_length = int(args[argsNum])
 argsNum = argsNum + 1
-if len(args) >= argsNum:
+if len(args) > argsNum:
     dist_reduct = int(args[argsNum])
     argsNum = argsNum + 1
 
