@@ -65,8 +65,8 @@ ud_stream = int(args[argsNum])
 argsNum = argsNum + 1
 norm_length = int(args[argsNum])
 argsNum = argsNum + 1
-if len(args) >= argsNum:
-    dist_reduct = int(args[argsNum])
+if len(args) > argsNum:
+    dist_reduct = float(args[argsNum])
     argsNum = argsNum + 1
 
 p = metaGenePlot(sam_file, sam_file2, gff_file, feature_type,
