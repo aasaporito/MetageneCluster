@@ -54,6 +54,7 @@ if args[argsNum] == "-r" or args[argsNum] == "-R":
     sam_file2 = args[argsNum]
     argsNum = argsNum + 1
     gff_file = args[argsNum]
+    argsNum = argsNum + 1
 else:
     sam_file = args[argsNum]
     argsNum = argsNum + 1
