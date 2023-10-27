@@ -28,7 +28,7 @@ gff_file = ""
 feature_type = ""
 ud_stream = 500
 norm_length = 1000
-dist_reduct	= 0.25
+dist_reduct = 0.25
 
 argsNum = 1
 if args[argsNum] == "-u":
