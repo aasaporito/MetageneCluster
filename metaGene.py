@@ -113,6 +113,7 @@ class metaGenePlot:
             self.__samLines, self.__samLines2, self.__gffLines = self.__parseData2(sam_file, sam_file2, gff_file)  # set file variables
             self.__samLength2 = len(self.__samLines2)
             self.samLength2 = 0
+            self.sam2 = sam_file2.split("/")[-1]
         self.__samLength = len(self.__samLines)
         self.__gffLength = len(self.__gffLines)
         self.sam = sam_file.split("/")[-1]
