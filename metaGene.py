@@ -109,11 +109,14 @@ class metaGenePlot:
         """
         if sam_file2 == "":
             self.__samLines, self.__gffLines = self.__parseData(sam_file, gff_file)  # set file variables
+            self.computeRatio = false
         else:
             self.__samLines, self.__samLines2, self.__gffLines = self.__parseData2(sam_file, sam_file2, gff_file)  # set file variables
             self.__samLength2 = len(self.__samLines2)
             self.samLength2 = 0
             self.sam2 = sam_file2.split("/")[-1]
+            self.__chrom2 = None
+            self.computeRatio = true
         self.__samLength = len(self.__samLines)
         self.__gffLength = len(self.__gffLines)
         self.sam = sam_file.split("/")[-1]
@@ -229,6 +232,9 @@ class metaGenePlot:
         self.__chrom = []
         for i in range(maxLength + self.__upDown):
             self.__chrom.append(0)
+        if (self.computeRatio):
+            for i in range(maxLength + self.__upDown):
+                self.__chrom2.append(0)
 
     def testSort(self):
         """Summary
@@ -329,8 +335,13 @@ class metaGenePlot:
         """Summary
             Erases all stored chromosome memory.
         """
-        for i in range(len(self.__chrom)):
-            self.__chrom[i] = 0
+        if (self.computeRatio):
+            for i in range(len(self.__chrom)):
+                self.__chrom[i] = 0
+                self.__chrom2[i] = 0
+        else:
+            for i in range(len(self.__chrom)):
+                self.__chrom[i] = 0
 
     def __buildData(self):
         """Summary
