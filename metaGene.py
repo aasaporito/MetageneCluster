@@ -110,7 +110,7 @@ class metaGenePlot:
         if sam_file2 == "":
             self.__samLines, self.__gffLines = self.__parseData(sam_file, gff_file)  # set file variables
         else:
-            self.__samLines, self._samLines2, self.__gffLines = self.__parseData2(sam_file, sam_file2, gff_file)  # set file variables
+            self.__samLines, self.__samLines2, self.__gffLines = self.__parseData2(sam_file, sam_file2, gff_file)  # set file variables
             self.__samLength2 = len(self.__samLines2)
             self.samLength2 = 0
         self.__samLength = len(self.__samLines)
@@ -188,7 +188,7 @@ class metaGenePlot:
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
             f1 = executor.submit(parseSam, sam)
-            f2 = executor.submit(parseGff, sam2)
+            f2 = executor.submit(parseSam, sam2)
             f3 = executor.submit(parseGff, gff)
 
         return f1.result(), f2.result(), f3.result()
