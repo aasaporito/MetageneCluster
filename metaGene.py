@@ -233,6 +233,7 @@ class metaGenePlot:
         for i in range(maxLength + self.__upDown):
             self.__chrom.append(0)
         if (self.computeRatio):
+            self.__chrom2 = []
             for i in range(maxLength + self.__upDown):
                 self.__chrom2.append(0)
 
