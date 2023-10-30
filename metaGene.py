@@ -324,7 +324,10 @@ class metaGenePlot:
                     zeros = 0
                     for i in range(start, end - 1):
                         # pull the values from the chromDIct to build new array
-                        currArray.append(self.__chrom[i])
+                        if (self.computeRatio):
+                            currArray.append(self.__chrom[i]) # This is what needs to change with __chrom2 to compute ratio.
+                        else:
+                            currArray.append(self.__chrom[i])
                         zeros += self.__chrom[i]
 
                     # throw out features that are all zeros
