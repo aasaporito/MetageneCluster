@@ -287,6 +287,19 @@ class metaGenePlot:
                     except:
                         continue
 
+        if (self.computeRatio):
+            for line in self.__samLines2[chrom]:
+                cols = line.split('\t')
+                if len(cols) >= 10:
+                    self.samLength2 = self.samLength2 + 1
+                    start, seqLength = int(cols[3]), len(cols[9])  # postion and sequence length
+                    end = start + seqLength - 1
+                    for j in range(start - 1, end):
+                        try:
+                            self.__chrom2[j] += 1
+                        except:
+                            continue
+
         print('populated ', chrom)
 
     def __getGffArrays(self, chrom):
