@@ -156,6 +156,19 @@ class metaGenePlot:
                     chroms[chrom].append(line)
 
         self.__samLines = chroms
+        
+        if (self.computeRatio):
+            chroms = {}
+            for line in self.__samLines2:  # go through file and add each line to respective chrom array
+                cols = line.split('\t')
+                if len(cols) >= 10 and len(cols[2]) < 8:
+                    chrom = cols[2]
+                    if chrom in chroms:
+                        chroms[chrom].append(line)
+                    else:
+                        chroms[chrom] = []
+                        chroms[chrom].append(line)
+            self.__samLines2 = chroms
 
     def __parseData(self, sam, gff):
         """Summary
