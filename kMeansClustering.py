@@ -306,7 +306,7 @@ def oneCluster(graphArrays):
 
     clusters = []
     for i, feature in enumerate(graphArrays):
-        clusters[1].append(i)
+        clusters[0].append(i)
     return clusters, totDistance
 
 
