@@ -287,7 +287,7 @@ def oneCluster(graphArrays):
         graphArrays (list): 2D Input data list
 
     Returns:
-        (list, int): Returns a list of averages and totalDistance between features
+        (list, int): Returns a list of all genes and totalDistance between features
     """
     avgArray = []
     for i in range(len(graphArrays[0])):
@@ -303,7 +303,10 @@ def oneCluster(graphArrays):
         for j in range(len(avgArray)):
             dist = abs(graphArrays[i][j] - avgArray[j])
             totDistance += dist
-    return avgArray, totDistance
+
+    for i, feature in enumerate(data):
+        clusters[cluster].append(i)
+    return clusters, totDistance
 
 
 def autoKCluster(data, distCalc, dist_stop = 0.2):
