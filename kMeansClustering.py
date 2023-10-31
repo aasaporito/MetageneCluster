@@ -331,7 +331,7 @@ def autoKCluster(data, distCalc, dist_stop = 0.2):
         numClusters += 1
 
     if len(totDistancePerIteration) == 1:
-        clusters, totDistance = kCluster(1, data, distCalc)
+        clusters, totDistance = oneCluster(data)
         numClusters = 2
     else:
         diff = abs(totDistancePerIteration[1] - totDistancePerIteration[0])
