@@ -304,8 +304,9 @@ def oneCluster(graphArrays):
             dist = abs(graphArrays[i][j] - avgArray[j])
             totDistance += dist
 
+    clusters = []
     for i, feature in enumerate(graphArrays):
-        clusters[cluster].append(i)
+        clusters[1].append(i)
     return clusters, totDistance
 
 
