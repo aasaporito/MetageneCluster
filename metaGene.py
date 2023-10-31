@@ -325,7 +325,7 @@ class metaGenePlot:
                     for i in range(start, end - 1):
                         # pull the values from the chromDIct to build new array
                         if (self.computeRatio):
-                            appendVal = math.log2(self.__chrom[i]+1/self.__chrom2[i]+1) # This is what needs to change with __chrom2 to compute ratio.  Add seq depth normalization and expand to cover up- and down-stream below
+                            appendVal = math.log2((self.__chrom[i]+1)/(self.__chrom2[i]+1)) # This is what needs to change with __chrom2 to compute ratio.  Add seq depth normalization and expand to cover up- and down-stream below
                             currArray.append(appendVal)
                         else:
                             currArray.append(self.__chrom[i])
