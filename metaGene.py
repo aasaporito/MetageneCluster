@@ -325,8 +325,12 @@ class metaGenePlot:
                     for i in range(start, end - 1):
                         # pull the values from the chromDIct to build new array
                         if (self.computeRatio):
-                            normalizedVal1 = self.__chrom[i] + 1 #Add the one after normalization once depth normalization is in
-                            normalizedVal2 = self.__chrom2[i] + 1
+                            if self.samLength2 > self.samLength1:
+                                normalizedVal1 = (self.__chrom[i] * (self.samLength1/self.samLength1))  + 1
+                                normalizedVal2 = (self.__chrom2[i] * (self.samLength1/self.samLength2)) + 1
+                            else:
+                                normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength1))  + 1
+                                normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
                             appendVal = math.log2(normalizedVal1/normalizedVal2) # This is what needs to change with __chrom2 to compute ratio.  Add seq depth normalization and expand to cover up- and down-stream below
                             currArray.append(appendVal)
                         else:
