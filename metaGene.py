@@ -353,11 +353,25 @@ class metaGenePlot:
                             for i in range(down, start):
                                 dwnStream.append(self.__chrom[i])
                         # get up stream values
-                        for i in range(end, up):
-                            try:
-                                upStream.append(self.__chrom[i])
-                            except:
-                                upStream.append(0)
+                        if (self.computeRatio):
+                            for i in range(end, up):
+                                try:
+                                    if self.samLength2 > self.samLength:
+                                        normalizedVal1 = (self.__chrom[i] * (self.samLength/self.samLength))  + 1
+                                        normalizedVal2 = (self.__chrom2[i] * (self.samLength/self.samLength2)) + 1
+                                    else:
+                                        normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
+                                        normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
+                                    appendVal = math.log2(normalizedVal1/normalizedVal2)
+                                    upStream.append(appendVal)
+                                except:
+                                    upStream.append(0)
+                        else:
+                            for i in range(end, up):
+                                try:
+                                    upStream.append(self.__chrom[i])
+                                except:
+                                    upStream.append(0)
 
                         if cols[6] == '-':
                             # invert feature array
