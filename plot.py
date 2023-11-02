@@ -7,7 +7,7 @@ import numpy as np
 # Unclustered edition
 
 
-def genPlotUn(result, fname, dirName, udStream, numFeatures):
+def genPlotUn(result, fname, dirName, udStream, numFeatures, computeRatio):
     """Summary
         Creates a plot of features using numpy and matplotlib for unclustered
     Args:
@@ -16,6 +16,7 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
         dirName (str): Directory to output to within Outputs/
         udStream (int): Distance between chromosomes.
         numFeatures (int): The number of features (utilized in the plot title)
+        computeRatio (boolean): Whether to compute the ratio of two files (true) or plot a single file's coverage (false)
     """
     print("Generating Unclustered plot")
     y = np.array(result)
@@ -48,7 +49,7 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
 
     plt.savefig(path, dpi=75)
 
-def genPlot(result, fname, dirName, udStream, numFeatures):
+def genPlot(result, fname, dirName, udStream, numFeatures, computeRatio):
     """Summary
         Creates a plot of features using numpy and matplotlib.
     Args:
@@ -57,6 +58,7 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
         dirName (str): Directory to output to within Outputs/
         udStream (int): Distance between chromosomes.
         numFeatures (int): The number of features (utilized in the plot title)
+        computeRatio (boolean): Whether to compute the ratio of two files (true) or plot a single file's coverage (false)
     """
     print("Generating clustered plot")
     y = np.array(result)
