@@ -516,7 +516,7 @@ class metaGenePlot:
                 avgDown, avgUp = averageUpDown(self.__upDownStream)
                 print(len(avgDown), len(avgArray), len(avgUp))
                 fullArray = avgDown + avgArray + avgUp
-        genPlotUn(fullArray, name, self.pathName, self.__upDown, len(trendData))
+        genPlotUn(fullArray, name, self.pathName, self.__upDown, len(trendData), self.computeRatio)
 
         if self.clustering == 1:
             exit()
@@ -561,7 +561,7 @@ class metaGenePlot:
                 else:
                     fullArray = avgArray
 
-                genPlot(fullArray, name, None, self.__upDown, len(trendData))
+                genPlot(fullArray, name, None, self.__upDown, len(trendData), self.computeRatio)
                 return
             elif(numClusters == 'auto'):  # find the optimal number of cluster for the given data
                 print("Fitting data...")
@@ -597,6 +597,6 @@ class metaGenePlot:
 
             avgArray = averageArray(clusterData)
 
-            genPlot(avgArray, name, self.pathName, self.__upDown, len(cluster))
+            genPlot(avgArray, name, self.pathName, self.__upDown, len(cluster), self.computeRatio)
             writeNames(
                 featureNames, self.pathName, self.sam[0:-4] + '_' + self.feature + '_' + str(i+1))
