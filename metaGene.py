@@ -341,14 +341,15 @@ class metaGenePlot:
                     if zeros > 0:
                         # get down stream values
                         if (self.computeRatio):
-                            if self.samLength2 > self.samLength:
-                                normalizedVal1 = (self.__chrom[i] * (self.samLength/self.samLength))  + 1
-                                normalizedVal2 = (self.__chrom2[i] * (self.samLength/self.samLength2)) + 1
-                            else:
-                                normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
-                                normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
-                            appendVal = math.log2(normalizedVal1/normalizedVal2)
-                            dwnStream.append(appendVal)
+                            for i in range(down, start):
+                                if self.samLength2 > self.samLength:
+                                    normalizedVal1 = (self.__chrom[i] * (self.samLength/self.samLength))  + 1
+                                    normalizedVal2 = (self.__chrom2[i] * (self.samLength/self.samLength2)) + 1
+                                else:
+                                    normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
+                                    normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
+                                appendVal = math.log2(normalizedVal1/normalizedVal2)
+                                dwnStream.append(appendVal)
                         else:
                             for i in range(down, start):
                                 dwnStream.append(self.__chrom[i])
