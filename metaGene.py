@@ -331,7 +331,7 @@ class metaGenePlot:
                             else:
                                 normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
                                 normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
-                            appendVal = math.log2(normalizedVal1/normalizedVal2) # This is what needs to change with __chrom2 to compute ratio.  Add seq depth normalization and expand to cover up- and down-stream below
+                            appendVal = math.log2(normalizedVal1/normalizedVal2)
                             currArray.append(appendVal)
                         else:
                             currArray.append(self.__chrom[i])
@@ -340,8 +340,18 @@ class metaGenePlot:
                     # throw out features that are all zeros
                     if zeros > 0:
                         # get down stream values
-                        for i in range(down, start):
-                            dwnStream.append(self.__chrom[i])
+                        if (self.computeRatio):
+                            if self.samLength2 > self.samLength:
+                                normalizedVal1 = (self.__chrom[i] * (self.samLength/self.samLength))  + 1
+                                normalizedVal2 = (self.__chrom2[i] * (self.samLength/self.samLength2)) + 1
+                            else:
+                                normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
+                                normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
+                            appendVal = math.log2(normalizedVal1/normalizedVal2)
+                            dwnStream.append(appendVal)
+                        else:
+                            for i in range(down, start):
+                                dwnStream.append(self.__chrom[i])
                         # get up stream values
                         for i in range(end, up):
                             try:
