@@ -28,7 +28,7 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
            ylim=(0, max(result)), yticks=np.arange(0, max(result) + 10))  # result[1]
 
     ax.set_xlabel('Distance')
-    ax.set_ylabel('Reads')
+    ax.set_ylabel('Coverage')
 
     plt.figure(figsize=(15, 10))
     plt.plot(x[(len(x) - udStream - 1):len(x) - 1],
@@ -39,8 +39,8 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
     plt.plot(x[udStream - 1:(len(x) - udStream - 1)],
              y[udStream - 1:(len(x) - udStream - 1)], color='black')
     plt.title(fname)
-    plt.xlabel('Distance')  # todo: Set this for unclustered
-    plt.ylabel('Reads')
+    plt.xlabel('Distance')
+    plt.ylabel('Coverage')
 
     path = fname + ".png"  # in case of single plot
     if dirName != None:
@@ -68,7 +68,7 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
            ylim=(0, max(result)), yticks=np.arange(0, max(result) + 10))  # result[1]
 
     ax.set_xlabel('Distance')
-    ax.set_ylabel('Reads')
+    ax.set_ylabel('Coverage')
 
     plt.figure(figsize=(15, 10))
     plt.plot(x[(len(x) - udStream - 1):len(x) - 1],
@@ -78,7 +78,7 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
              y[udStream - 1:(len(x) - udStream - 1)], color='black')
     plt.title(fname + ' (' + str(numFeatures) + ')')
     plt.xlabel('Distance')
-    plt.ylabel('Reads')
+    plt.ylabel('Coverage')
     plt.xticks([])
 
     path = fname + ".png"  # in case of single plot
