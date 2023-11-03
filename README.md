@@ -84,9 +84,14 @@ Clone the repo:
 
 To run, open a terminal in the MetageneCluster directory.
 
-Example:
+#### Examples:
+Minimal parameters:
   ```sh
-    python3 run.py -c -s file_name.sam file_name.gff CDS 500 1000
+    python3 run.py RNA_seq.sam hg38.gff CDS 500 1000
+  ```
+Full parameters:
+  ```sh
+    python3 run.py -c -s -r H3K36me3.sam input.sam TAIR9.gff CDS 500 1000 0.25
   ```
 
 ### Parameters
