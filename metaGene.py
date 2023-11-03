@@ -107,8 +107,16 @@ class metaGenePlot:
             udStream (int, optional): The distance between up and down stream for chromosomes in .gff. Default = 0.
             sorted (bool, optional): Deprecated, does nothing.
         """
-        self.__samLines, self.__gffLines = self.__parseData(
-            sam_file, gff_file)  # set file variables
+        if sam_file2 == "":
+            self.__samLines, self.__gffLines = self.__parseData(sam_file, gff_file)  # set file variables
+            self.computeRatio = False
+        else:
+            self.__samLines, self.__samLines2, self.__gffLines = self.__parseData2(sam_file, sam_file2, gff_file)  # set file variables
+            self.__samLength2 = len(self.__samLines2)
+            self.samLength2 = 0
+            self.sam2 = sam_file2.split("/")[-1]
+            self.__chrom2 = None
+            self.computeRatio = True
         self.__samLength = len(self.__samLines)
         self.__gffLength = len(self.__gffLines)
         self.sam = sam_file.split("/")[-1]
@@ -148,6 +156,19 @@ class metaGenePlot:
                     chroms[chrom].append(line)
 
         self.__samLines = chroms
+        
+        if (self.computeRatio):
+            chroms = {}
+            for line in self.__samLines2:  # go through file and add each line to respective chrom array
+                cols = line.split('\t')
+                if len(cols) >= 10 and len(cols[2]) < 8:
+                    chrom = cols[2]
+                    if chrom in chroms:
+                        chroms[chrom].append(line)
+                    else:
+                        chroms[chrom] = []
+                        chroms[chrom].append(line)
+            self.__samLines2 = chroms
 
     def __parseData(self, sam, gff):
         """Summary
@@ -168,6 +189,27 @@ class metaGenePlot:
 
         return f1.result(), f2.result()
 
+    def __parseData2(self, sam, sam2, gff):
+        """Summary
+            Reads and stores .sam, .sam2, and .gff files.
+
+        Args:
+            sam (string): .sam file name
+            sam2 (string): a second .sam file name for computing ratio of sam:sam2
+            gff (string): .gff file name
+
+        Returns:
+            (str, str, str): A tuple storing the raw data from .sam, .sam2, and .gff files
+        """
+        concurrent.futures.ThreadPoolExecutor()
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+            f1 = executor.submit(parseSam, sam)
+            f2 = executor.submit(parseSam, sam2)
+            f3 = executor.submit(parseGff, gff)
+
+        return f1.result(), f2.result(), f3.result()
+    
     def __getChromLength(self):
         """Summary
             Finds the max length and sorts .gff entries by chromosome.
@@ -203,6 +245,10 @@ class metaGenePlot:
         self.__chrom = []
         for i in range(maxLength + self.__upDown):
             self.__chrom.append(0)
+        if (self.computeRatio):
+            self.__chrom2 = []
+            for i in range(maxLength + self.__upDown):
+                self.__chrom2.append(0)
 
     def testSort(self):
         """Summary
@@ -241,6 +287,19 @@ class metaGenePlot:
                     except:
                         continue
 
+        if (self.computeRatio):
+            for line in self.__samLines2[chrom]:
+                cols = line.split('\t')
+                if len(cols) >= 10:
+                    self.samLength2 = self.samLength2 + 1
+                    start, seqLength = int(cols[3]), len(cols[9])  # postion and sequence length
+                    end = start + seqLength - 1
+                    for j in range(start - 1, end):
+                        try:
+                            self.__chrom2[j] += 1
+                        except:
+                            continue
+
         print('populated ', chrom)
 
     def __getGffArrays(self, chrom):
@@ -265,20 +324,55 @@ class metaGenePlot:
                     zeros = 0
                     for i in range(start, end - 1):
                         # pull the values from the chromDIct to build new array
-                        currArray.append(self.__chrom[i])
+                        if (self.computeRatio):
+                            if self.samLength2 > self.samLength:
+                                normalizedVal1 = (self.__chrom[i] * (self.samLength/self.samLength))  + 1
+                                normalizedVal2 = (self.__chrom2[i] * (self.samLength/self.samLength2)) + 1
+                            else:
+                                normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
+                                normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
+                            appendVal = math.log2(normalizedVal1/normalizedVal2)
+                            currArray.append(appendVal)
+                        else:
+                            currArray.append(self.__chrom[i])
                         zeros += self.__chrom[i]
 
                     # throw out features that are all zeros
                     if zeros > 0:
                         # get down stream values
-                        for i in range(down, start):
-                            dwnStream.append(self.__chrom[i])
+                        if (self.computeRatio):
+                            for i in range(down, start):
+                                if self.samLength2 > self.samLength:
+                                    normalizedVal1 = (self.__chrom[i] * (self.samLength/self.samLength))  + 1
+                                    normalizedVal2 = (self.__chrom2[i] * (self.samLength/self.samLength2)) + 1
+                                else:
+                                    normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
+                                    normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
+                                appendVal = math.log2(normalizedVal1/normalizedVal2)
+                                dwnStream.append(appendVal)
+                        else:
+                            for i in range(down, start):
+                                dwnStream.append(self.__chrom[i])
                         # get up stream values
-                        for i in range(end, up):
-                            try:
-                                upStream.append(self.__chrom[i])
-                            except:
-                                upStream.append(0)
+                        if (self.computeRatio):
+                            for i in range(end, up):
+                                try:
+                                    if self.samLength2 > self.samLength:
+                                        normalizedVal1 = (self.__chrom[i] * (self.samLength/self.samLength))  + 1
+                                        normalizedVal2 = (self.__chrom2[i] * (self.samLength/self.samLength2)) + 1
+                                    else:
+                                        normalizedVal1 = (self.__chrom[i] * (self.samLength2/self.samLength))  + 1
+                                        normalizedVal2 = (self.__chrom2[i] * (self.samLength2/self.samLength2)) + 1
+                                    appendVal = math.log2(normalizedVal1/normalizedVal2)
+                                    upStream.append(appendVal)
+                                except:
+                                    upStream.append(0)
+                        else:
+                            for i in range(end, up):
+                                try:
+                                    upStream.append(self.__chrom[i])
+                                except:
+                                    upStream.append(0)
 
                         if cols[6] == '-':
                             # invert feature array
@@ -303,8 +397,13 @@ class metaGenePlot:
         """Summary
             Erases all stored chromosome memory.
         """
-        for i in range(len(self.__chrom)):
-            self.__chrom[i] = 0
+        if (self.computeRatio):
+            for i in range(len(self.__chrom)):
+                self.__chrom[i] = 0
+                self.__chrom2[i] = 0
+        else:
+            for i in range(len(self.__chrom)):
+                self.__chrom[i] = 0
 
     def __buildData(self):
         """Summary
@@ -418,7 +517,7 @@ class metaGenePlot:
                 avgDown, avgUp = averageUpDown(self.__upDownStream)
                 print(len(avgDown), len(avgArray), len(avgUp))
                 fullArray = avgDown + avgArray + avgUp
-        genPlotUn(fullArray, name, self.pathName, self.__upDown, len(trendData))
+        genPlotUn(fullArray, name, self.pathName, self.__upDown, len(trendData), self.computeRatio)
 
         if self.clustering == 1:
             exit()
@@ -463,7 +562,7 @@ class metaGenePlot:
                 else:
                     fullArray = avgArray
 
-                genPlot(fullArray, name, None, self.__upDown, len(trendData))
+                genPlot(fullArray, name, None, self.__upDown, len(trendData), self.computeRatio)
                 return
             elif(numClusters == 'auto'):  # find the optimal number of cluster for the given data
                 print("Fitting data...")
@@ -499,6 +598,6 @@ class metaGenePlot:
 
             avgArray = averageArray(clusterData)
 
-            genPlot(avgArray, name, self.pathName, self.__upDown, len(cluster))
+            genPlot(avgArray, name, self.pathName, self.__upDown, len(cluster), self.computeRatio)
             writeNames(
                 featureNames, self.pathName, self.sam[0:-4] + '_' + self.feature + '_' + str(i+1))

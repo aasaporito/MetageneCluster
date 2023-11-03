@@ -7,7 +7,7 @@ import numpy as np
 # Unclustered edition
 
 
-def genPlotUn(result, fname, dirName, udStream, numFeatures):
+def genPlotUn(result, fname, dirName, udStream, numFeatures, computeRatio):
     """Summary
         Creates a plot of features using numpy and matplotlib for unclustered
     Args:
@@ -16,6 +16,7 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
         dirName (str): Directory to output to within Outputs/
         udStream (int): Distance between chromosomes.
         numFeatures (int): The number of features (utilized in the plot title)
+        computeRatio (boolean): Whether to compute the ratio of two files (true) or plot a single file's coverage (false)
     """
     print("Generating Unclustered plot")
     y = np.array(result)
@@ -28,7 +29,10 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
            ylim=(0, max(result)), yticks=np.arange(0, max(result) + 10))  # result[1]
 
     ax.set_xlabel('Distance')
-    ax.set_ylabel('Reads')
+    if computeRatio:
+        ax.set_ylabel('log2-ratio')
+    else:
+        ax.set_ylabel('Coverage')
 
     plt.figure(figsize=(15, 10))
     plt.plot(x[(len(x) - udStream - 1):len(x) - 1],
@@ -39,8 +43,11 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
     plt.plot(x[udStream - 1:(len(x) - udStream - 1)],
              y[udStream - 1:(len(x) - udStream - 1)], color='black')
     plt.title(fname)
-    plt.xlabel('Distance')  # todo: Set this for unclustered
-    plt.ylabel('Reads')
+    plt.xlabel('Distance')
+    if computeRatio:
+        plt.ylabel('log2-ratio')
+    else:
+        plt.ylabel('Coverage')
 
     path = fname + ".png"  # in case of single plot
     if dirName != None:
@@ -48,7 +55,7 @@ def genPlotUn(result, fname, dirName, udStream, numFeatures):
 
     plt.savefig(path, dpi=75)
 
-def genPlot(result, fname, dirName, udStream, numFeatures):
+def genPlot(result, fname, dirName, udStream, numFeatures, computeRatio):
     """Summary
         Creates a plot of features using numpy and matplotlib.
     Args:
@@ -57,6 +64,7 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
         dirName (str): Directory to output to within Outputs/
         udStream (int): Distance between chromosomes.
         numFeatures (int): The number of features (utilized in the plot title)
+        computeRatio (boolean): Whether to compute the ratio of two files (true) or plot a single file's coverage (false)
     """
     print("Generating clustered plot")
     y = np.array(result)
@@ -68,7 +76,10 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
            ylim=(0, max(result)), yticks=np.arange(0, max(result) + 10))  # result[1]
 
     ax.set_xlabel('Distance')
-    ax.set_ylabel('Reads')
+    if computeRatio:
+        ax.set_ylabel('log2-ratio')
+    else:
+        ax.set_ylabel('Coverage')
 
     plt.figure(figsize=(15, 10))
     plt.plot(x[(len(x) - udStream - 1):len(x) - 1],
@@ -78,7 +89,10 @@ def genPlot(result, fname, dirName, udStream, numFeatures):
              y[udStream - 1:(len(x) - udStream - 1)], color='black')
     plt.title(fname + ' (' + str(numFeatures) + ')')
     plt.xlabel('Distance')
-    plt.ylabel('Reads')
+    if computeRatio:
+        plt.ylabel('log2-ratio')
+    else:
+        plt.ylabel('Coverage')
     plt.xticks([])
 
     path = fname + ".png"  # in case of single plot
