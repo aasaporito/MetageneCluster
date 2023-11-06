@@ -93,7 +93,6 @@ def genPlot(result, fname, dirName, udStream, numFeatures, computeRatio):
         plt.ylabel('log2-ratio')
     else:
         plt.ylabel('Coverage')
-    plt.xticks([])
 
     path = fname + ".png"  # in case of single plot
     if dirName != None:
